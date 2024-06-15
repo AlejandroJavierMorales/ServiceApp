@@ -5,6 +5,7 @@ import PublishersList from "./PublishersList";
 import PublisherDetail from "./PublisherDetail";
 import User from "./User";
 import Search from "./Search";
+import Publish from "./Publish";
 
 export {
     Home,
@@ -13,5 +14,6 @@ export {
     PublishersList,
     PublisherDetail,
     User,
-    Search
+    Search,
+    Publish
 }

@@ -50,7 +50,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="SearTabchScreen"
+        name="SearchTabScreen"
         component={SearchStackNavigator}
         options={{
           tabBarIcon: ({ focused }) => {

@@ -1,6 +1,6 @@
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Home, PublisherDetail, PublishersList, SubCategories, SubSubCategories } from "../screens";
+import { Home, Publish, PublisherDetail, PublishersList, SubCategories, SubSubCategories } from "../screens";
 import { Header } from "../components/shared";
 
 const Stack = createNativeStackNavigator();
@@ -35,6 +35,7 @@ export default function HomeStackNavigator() {
       <Stack.Screen name="SubSubCategories" component={SubSubCategories} />
       <Stack.Screen name="PublishersList" component={PublishersList} />
       <Stack.Screen name="PublisherDetail" component={PublisherDetail} />
+      <Stack.Screen name="Publish" component={Publish} />
     </Stack.Navigator>
   );
 }

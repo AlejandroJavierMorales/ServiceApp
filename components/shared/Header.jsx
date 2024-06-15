@@ -28,6 +28,10 @@ const Header = ({ title = '', navigation, route }) => {
         navigation.navigate('Home');
     }
 
+    useEffect(()=>{
+            console.log('Model: ', modalVisible)
+    },[modalVisible])
+
     return (
         <View>
             <View style={styles.headerContainer}>
@@ -67,16 +71,16 @@ const Header = ({ title = '', navigation, route }) => {
                         <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
                             <Icon name="close" size={30} color="#000" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.menuItem} onPress={() => { /* Maneja la acción de "Inicio" aquí */ }}>
+                       { <TouchableOpacity style={styles.menuItem} onPress={() => {setModalVisible(false); navigation.navigate('HomeTabScreen'); }}>
                             <Icon name="home" size={20} color="#24af63" />
                             <Text style={styles.menuItemText}>Inicio</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.menuItem} onPress={() => { /* Maneja la acción de "Login" aquí */ }}>
-                            <Icon name="sign-in" size={20} color="#24af63" />
-                            <Text style={styles.menuItemText}>Login</Text>
+                        </TouchableOpacity>}
+                        <TouchableOpacity style={styles.menuItem} onPress={() => {setModalVisible(false); navigation.navigate('UserTabScreen')}}>
+                            <Icon name="user" size={20} color="#24af63" />
+                            <Text style={styles.menuItemText}>Usuario</Text>
                         </TouchableOpacity>
                         <View style={styles.divider}></View>
-                        <TouchableOpacity style={styles.menuItem} onPress={() => { /* Maneja la acción de "Buscar" aquí */ }}>
+                        <TouchableOpacity style={styles.menuItem} onPress={() => {setModalVisible(false);  navigation.navigate('SearchTabScreen')}}>
                             <Icon name="search" size={20} color="#000" />
                             <Text style={styles.menuItemText}>Buscar</Text>
                         </TouchableOpacity>
