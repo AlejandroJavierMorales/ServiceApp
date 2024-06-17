@@ -1,30 +1,31 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
 import { CardItem } from '../components/shared';
 import useGeneralContext from '../hooks/useGeneralContext';
+import fetchSubscriptions from '../utils/data/fetchSubscriptions';
 
 
 
-const SubSubCategories = ({ navigation, route } ) => {
+const SubSubCategories = ({ navigation, route }) => {
 
-  const { 
+  const {
     categories, setCategories,
     subCategories, setSubCategories,
     categorySelected, setCategorySelected,
     subCategorySelected, setSubCategorySelected,
     setDataOfServer, dataOfServer,
     setSubCategoriesSelected, setSubscriptionsType,
-    subCategoriesSelected ,setSubSubCategorySelected,
+    subCategoriesSelected, setSubSubCategorySelected,
     setActualPage, actualPage,
-    setSubSubCategoriesSelected,subSubCategoriesSelected,
-    subSubCategorySelected
+    setSubSubCategoriesSelected, subSubCategoriesSelected,
+    subSubCategorySelected, setArrayPublishers
   } = useGeneralContext();
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
+  const isMounted = useRef(false);
 
- 
-  const handleClickOnSubSubCategory = (item)=>{
-    console.log(JSON.stringify(item,null,2))
+  const handleClickOnSubSubCategory = (item) => {
+    console.log(JSON.stringify(item, null, 2))
     setSubSubCategorySelected(item);
   }
 
@@ -32,24 +33,46 @@ const SubSubCategories = ({ navigation, route } ) => {
 
   //Pocesa Sub-SubCategory Selected
   useEffect(() => {
-    console.log(
-      "La SubSubCategoria Seleccionada es : " +
-      JSON.stringify(subSubCategorySelected, null, 2)
-    );
-    //Procesar las subSubCategorias de subCategorySelected
-
-    if (subSubCategorySelected !== null) {
-      //Mostrar publicaciones para la categoria seleciconada en SubscriptionsPage
-      setSubscriptionsType('subsubcategories');
-      navigation.navigate('PublishersList', `Servicios de ${subSubCategorySelected?.name.split('_') // Divide el nombre por guiones bajos
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza la primera letra de cada palabra
-      .join(' ')}`);
+    const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
+      try {
+        const data = await fetchSubscriptions(categoryid, subcategoryid, subsubcategoryid);
+        return data;
+      } catch (error) {
+        console.error("Error fetching publishers: ", error);
+      }
     }
+
+    const loadPublishers = async () => {
+      if (isMounted.current) {
+        console.log(
+          "La SubSubCategoria Seleccionada es : " +
+          JSON.stringify(subSubCategorySelected, null, 2)
+        );
+        //Procesar las subSubCategorias de subCategorySelected
+        if (subSubCategorySelected !== null) {
+          //Mostrar publicaciones para la categoria seleciconada en SubscriptionsPage
+          try {
+            const data = await getPublishers(categorySelected?.id, subCategorySelected?.id, subSubCategorySelected?.id);
+            console.log('data de ArrayPublishers ', data)
+            setArrayPublishers(data);
+            setSubscriptionsType('categories');
+            navigation.navigate('PublishersList', `Servicios de ${subSubCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
+          } catch (error) {
+            console.error("Error while setting publishers: ", error);
+          }
+        }
+      }
+    }
+    loadPublishers();
   }, [subSubCategorySelected]);
 
-  useEffect(()=>{
-    console.log('SUBSUBCATEGORIAS ***   ',subSubCategoriesSelected)
-  },[])
+  useEffect(() => {
+    console.log('SUBSUBCATEGORIAS ***   ', subSubCategoriesSelected)
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, [])
 
 
   return (

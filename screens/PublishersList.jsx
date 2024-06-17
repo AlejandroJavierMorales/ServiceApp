@@ -1,35 +1,49 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
-import { CardItem } from '../components/shared';
+import { CardItem, Publisher } from '../components/shared';
+import useGeneralContext from '../hooks/useGeneralContext';
 
 
 
-const PublishersList = ({ publishers=[] }) => {
+const PublishersList = ({ navigation, route }) => {
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
 
+  const {arrayPublishers, setPublisherDetail}=useGeneralContext();
+  const [publishersList, setPublishersList] = useState([])
  
-  const handleClickOnPublisher = (item)=>{
-    console.log(JSON.stringify(item,null,2))
+  const onHandleLocation = (item)=>{
+    console.log(JSON.stringify('Location '+item,null,2))
+  }
+  const onHandleWhatsapp = (item)=>{
+    console.log(JSON.stringify('Whatsapp '+item,null,2))
+  }
+  const onHandleDetail = (item)=>{
+    setPublisherDetail(item);
+    navigation.navigate('PublisherDetail', item?.company_name);
+    console.log(JSON.stringify('Detail '+item,null,2))
   }
 
   const cardWidth = (width - 10) / 3; // Calcula el ancho de cada tarjeta para 3 tarjetas por fila
 
+  useEffect(()=>{
+    console.log('Array de Publishers: ', arrayPublishers)
+    setPublishersList(arrayPublishers)
+  }, [arrayPublishers])
+
   return (
-    <View style={styles.container}>
-      <Text>{'Publishers'}</Text>
-      <FlatList
-        contentContainerStyle={styles.listCards}
-        data={publishers}
-        keyExtractor={(item) => item.publisherId.toString()}
-        renderItem={({ item }) => (
-        //Listar una fila por cada item de Publisgher
-        <View>
-            <Text>{item.name}</Text>
-        </View>
-        )}
-        numColumns={3} // Muestra tres tarjetas por fila
-      />
-      {/* <StatusBar style="auto" /> */}
+    <View>
+      {
+      publishersList[0]?.firstname  && (
+      arrayPublishers.map((item, index) => (
+        <Publisher 
+          key={index} 
+          item={item} 
+          onHandleLocation={() => onHandleLocation(item)}
+          onHandleWhatsapp={() => onHandleWhatsapp(item)}
+          onHandleDetail={() => onHandleDetail(item)}
+        />
+      ))
+      )}
     </View>
   );
 };

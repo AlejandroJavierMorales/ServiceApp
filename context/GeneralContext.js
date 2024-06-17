@@ -35,6 +35,8 @@ const GeneralContextProvider = ({ children }) => {
     const [actualPage, setActualPage] = useState('home');
     const [scheduleItem, setScheduleItem] = useState(null);
     const [scheduledItems, setScheduledItems] = useState([]);
+    const [arrayPublishers, setArrayPublishers] = useState([]);
+    const [publisherDetail, setPublisherDetail] = useState(null)
 
     return (
         <GeneralContext.Provider value={{
@@ -62,7 +64,9 @@ const GeneralContextProvider = ({ children }) => {
             myFavorites, setMyFavorites,
             actualPage, setActualPage,
             scheduleItem, setScheduleItem,
-            scheduledItems, setScheduledItems
+            scheduledItems, setScheduledItems,
+            arrayPublishers, setArrayPublishers,
+            publisherDetail, setPublisherDetail
         }}>
             {children}
         </GeneralContext.Provider>

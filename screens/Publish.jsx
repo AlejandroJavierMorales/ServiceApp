@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 
-function Publish() {
+function Publish({navigation, route}) {
     return (
         <View style={styles.container}>
             <Text>{'Publish Screen'}</Text>

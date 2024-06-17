@@ -3,6 +3,8 @@ import { View, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
 import { CardItem } from '../components/shared';
 import { GeneralContext } from '../context/GeneralContext';
 import fetchData from '../utils/data/fetchData';
+import fetchSubscriptions from '../utils/data/fetchSubscriptions';
+
 
 const Home = ({ navigation }) => {
   const { width } = useWindowDimensions();
@@ -12,7 +14,7 @@ const Home = ({ navigation }) => {
     categorySelected, setCategorySelected,
     setDataOfServer, dataOfServer,
     setSubCategoriesSelected, setSubscriptionsType,
-    setActualPage
+    setActualPage, setArrayPublishers
   } = useContext(GeneralContext);
   const cardWidth = (width - 10) / 3;
 
@@ -30,18 +32,13 @@ const Home = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    // Filter unique categories and subcategories when dataOfServer changes
     if (dataOfServer && dataOfServer.length > 0) {
       const uniqueCategoriesMap = new Map();
       const uniqueSubCategoriesMap = new Map();
 
       dataOfServer.forEach(item => {
-        if (!uniqueCategoriesMap.has(item.categoryid)) {
-          uniqueCategoriesMap.set(item.categoryid, item);
-        }
-        if (!uniqueSubCategoriesMap.has(item.subcategoryid)) {
-          uniqueSubCategoriesMap.set(item.subcategoryid, item);
-        }
+        uniqueCategoriesMap.set(item.categoryid, item);
+        uniqueSubCategoriesMap.set(item.subcategoryid, item);
       });
 
       const uniqueCategories = Array.from(uniqueCategoriesMap.values());
@@ -56,22 +53,38 @@ const Home = ({ navigation }) => {
     setCategorySelected(item);
   };
 
+
   useEffect(() => {
-    if (categorySelected) {
-      const subcategoriesOfCategory = subCategories.filter(category => category.categoryid === categorySelected.id);
-      console.log('SUBCATEGORIAS DE CATEGORIA ****', subcategoriesOfCategory)
-      if (subcategoriesOfCategory.length > 0 && subcategoriesOfCategory[0]?.subcategoryid) {
-        console.log('Tiene: ' + subcategoriesOfCategory.length + ' subcategorias')
-        setSubCategoriesSelected(subcategoriesOfCategory);
-        navigation.navigate('SubCategories', categorySelected?.name);
-      } else {
-        console.log('por publishers en categorias')
-        setSubscriptionsType('categories');
-        navigation.navigate('PublishersList', `Servicios de ${categorySelected?.name.split('_') // Divide el nombre por guiones bajos
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza la primera letra de cada palabra
-        .join(' ')}`);
+    const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
+      try {
+        const data = await fetchSubscriptions(categoryid, subcategoryid, subsubcategoryid);
+        return data;
+      } catch (error) {
+        console.error("Error fetching publishers: ", error);
       }
     }
+
+    const loadPublishers = async () => {
+      if (categorySelected) {
+        const subcategoriesOfCategory = subCategories.filter(category => category.categoryid === categorySelected.id);
+        if (subcategoriesOfCategory.length > 0 && subcategoriesOfCategory[0]?.subcategoryid) {
+          setSubCategoriesSelected(subcategoriesOfCategory);
+          navigation.navigate('SubCategories', categorySelected?.name);
+        } else {
+          try {
+            const data = await getPublishers(categorySelected?.id, null, null);
+            console.log('data de ArrayPublishers ', data)
+            setArrayPublishers(data);
+            setSubscriptionsType('categories');
+            navigation.navigate('PublishersList', `Servicios de ${categorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
+          } catch (error) {
+            console.error("Error while setting publishers: ", error);
+          }
+        }
+      }
+    };
+
+    loadPublishers();
   }, [categorySelected, subCategories]);
 
   useEffect(() => {
@@ -114,4 +127,3 @@ const styles = StyleSheet.create({
 });
 
 export default Home;
-

@@ -1,12 +1,21 @@
 import React from 'react'
-import { Publisher } from '../components/shared'
+import useGeneralContext from '../hooks/useGeneralContext'
+import { View } from 'react-native';
+import { Publisher } from '../components/shared';
 
-const PublisherDetail = ({publisher}) => {
+const PublisherDetail = () => {
+
+  const { publisherDetail } = useGeneralContext();
+
   return (
-    //Screen de detalles del Publisher, Modals etc
-    <div>
-      <Publisher publisher={publisher}/>
-    </div>
+    <View>
+      {publisherDetail !== null &&
+        <Publisher item={publisherDetail} />
+      }
+    </View>
+
+
+
   )
 }
 

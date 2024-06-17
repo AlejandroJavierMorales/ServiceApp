@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
 import { CardItem } from '../components/shared';
 import useGeneralContext from '../hooks/useGeneralContext';
+import fetchSubscriptions from '../utils/data/fetchSubscriptions';
 
 
 
@@ -15,7 +16,8 @@ const SubCategories = ({ navigation, route }) => {
     setDataOfServer, dataOfServer,
     setSubCategoriesSelected, setSubscriptionsType,
     subCategoriesSelected, setSubSubCategorySelected,
-    setActualPage, actualPage, setSubSubCategoriesSelected
+    setActualPage, actualPage, setSubSubCategoriesSelected,
+    setArrayPublishers
   } = useGeneralContext();
 
   const isMounted = useRef(false);
@@ -28,29 +30,44 @@ const SubCategories = ({ navigation, route }) => {
   const cardWidth = (width - 10) / 3; // Calcula el ancho de cada tarjeta para 3 tarjetas por fila
 
   useEffect(() => {
-
-    if (isMounted.current) {
-      const subSubcategoriesOfSubCategory = dataOfServer.filter((subCategory) => subCategory?.subcategoryid === subCategorySelected?.id
-      );
-      console.log(
-        "SUBCATEGORIAS DE LA SUBCATEGORIA " +
-        subCategorySelected?.name +
-        " - " +
-        JSON.stringify(subSubcategoriesOfSubCategory, null, 2)
-      );
-      if (subSubcategoriesOfSubCategory.length > 0 && subSubcategoriesOfSubCategory[0].subsubcategoryid) {
-        setSubSubCategoriesSelected(subSubcategoriesOfSubCategory);
-        navigation.navigate('SubSubCategories', subCategorySelected?.name);
-      } else {
-        console.log('no hay susubcategorias*************')
-        setSubscriptionsType('subcategories');
-        navigation.navigate('PublishersList', `Servicios de ${subCategorySelected?.name.split('_') // Divide el nombre por guiones bajos
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza la primera letra de cada palabra
-        .join(' ')}`);
+    const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
+      try {
+        const data = await fetchSubscriptions(categoryid, subcategoryid, subsubcategoryid);
+        return data;
+      } catch (error) {
+        console.error("Error fetching publishers: ", error);
       }
-    } else {
-      isMounted.current = true;
     }
+
+    const loadPublishers = async () => {
+      if (isMounted.current) {
+        const subSubcategoriesOfSubCategory = dataOfServer.filter((subCategory) => subCategory?.subcategoryid === subCategorySelected?.id
+        );
+        console.log(
+          "SUBCATEGORIAS DE LA SUBCATEGORIA " +
+          subCategorySelected?.name +
+          " - " +
+          JSON.stringify(subSubcategoriesOfSubCategory, null, 2)
+        );
+        if (subSubcategoriesOfSubCategory.length > 0 && subSubcategoriesOfSubCategory[0].subsubcategoryid) {
+          setSubSubCategoriesSelected(subSubcategoriesOfSubCategory);
+          navigation.navigate('SubSubCategories', subCategorySelected?.name);
+        } else {
+          try {
+            const data = await getPublishers(categorySelected?.id, subCategorySelected?.id, null);
+            console.log('data de ArrayPublishers ', data)
+            setArrayPublishers(data);
+            setSubscriptionsType('categories');
+            navigation.navigate('PublishersList', `Servicios de ${subCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
+          } catch (error) {
+            console.error("Error while setting publishers: ", error);
+          }
+        }
+      } else {
+        isMounted.current = true;
+      }
+    }
+    loadPublishers();
   }, [subCategorySelected]);
 
 
