@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
-import { CardItem, Publisher } from '../components/shared';
+import { CardItem, Publisher, PublisherRow } from '../components/shared';
 import useGeneralContext from '../hooks/useGeneralContext';
 
 
@@ -25,6 +25,7 @@ const PublishersList = ({ navigation, route }) => {
 
   const cardWidth = (width - 10) / 3; // Calcula el ancho de cada tarjeta para 3 tarjetas por fila
 
+
   useEffect(()=>{
     console.log('Array de Publishers: ', arrayPublishers)
     setPublishersList(arrayPublishers)
@@ -35,7 +36,7 @@ const PublishersList = ({ navigation, route }) => {
       {
       publishersList[0]?.firstname  && (
       arrayPublishers.map((item, index) => (
-        <Publisher 
+        <PublisherRow 
           key={index} 
           item={item} 
           onHandleLocation={() => onHandleLocation(item)}

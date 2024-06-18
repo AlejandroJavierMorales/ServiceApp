@@ -5,17 +5,16 @@ import WhatsApp from "./Whatsapp";
 import PublisherRow from "./PublisherRow";
 import Publisher from "./Publisher";
 import ContactItem from "./ContactItem";
-import Carrusel from "./carrusel";
-
+import CarruselSwiper from "./CarruselSwiper";
 
 
 export {
-    CardItem, 
+    CardItem,
     Header,
     Footer,
     WhatsApp,
     PublisherRow,
     Publisher,
     ContactItem,
-    Carrusel
+    CarruselSwiper
 }

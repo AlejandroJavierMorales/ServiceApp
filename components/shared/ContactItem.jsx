@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 

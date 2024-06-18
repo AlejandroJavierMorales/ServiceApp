@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
+
 const PublisherRow = ({ item, onHandleLocation, onHandleWhatsapp, onHandleDetail }) => {
   const { company_name, firstname, lastname, description1 } = item;
 
