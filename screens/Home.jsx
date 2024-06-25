@@ -12,16 +12,18 @@ import {
   setCategories, setSubCategories, 
   setCategorySelected,setSubCategoriesSelected
 } from "../fetures/Services/ServicesSlice";
+import { setPublishers} from "../fetures/Publishers/PublishersSlice";
 
 
 const Home = ({ navigation }) => {
 
-  const dataOfServerStored = useSelector((state) => state.dataOfServer.value)
-  const servicesStored = useSelector((state) => state.services.value)
+  const dataOfServerStored = useSelector((state) => state.dataOfServer.value);
+  const servicesStored = useSelector((state) => state.services.value);
+  const publishersStored =useSelector((state)=>state.publishers.value.publishers);
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions();
-  const { setSubscriptionsType, setActualPage, setArrayPublishers } = useContext(GeneralContext);
+  const { setSubscriptionsType, setActualPage } = useContext(GeneralContext);
 
 
   const cardWidth = (width - 10) / 3;
@@ -90,7 +92,7 @@ const Home = ({ navigation }) => {
             console.log('CATEGORIA SELECCTED ID ', servicesStored.categorySelected?.id)
             const data = await getPublishers(servicesStored.categorySelected?.id, null, null);
             console.log('data de ArrayPublishers ', data)
-            setArrayPublishers(data);
+            dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.categorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {

@@ -5,15 +5,17 @@ import useGeneralContext from '../hooks/useGeneralContext';
 import fetchSubscriptions from '../utils/data/fetchSubscriptions';
 import { useDispatch, useSelector } from "react-redux";
 import { setSubSubCategorySelected } from "../fetures/Services/ServicesSlice";
+import { setPublishers} from "../fetures/Publishers/PublishersSlice";
 
 
 const SubSubCategories = ({ navigation, route }) => {
 
 
-  const servicesStored = useSelector((state) => state.services.value)
+  const servicesStored = useSelector((state) => state.services.value);
+  const publishersStored =useSelector((state)=>state.publishers.value.publishers);
   const dispatch = useDispatch();
 
-  const {setActualPage, actualPage,setArrayPublishers, setSubscriptionsType} = useGeneralContext();
+  const {setActualPage, actualPage, setSubscriptionsType} = useGeneralContext();
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
   const isMounted = useRef(false);
@@ -47,8 +49,8 @@ const SubSubCategories = ({ navigation, route }) => {
           //Mostrar publicaciones para la categoria seleciconada en SubscriptionsPage
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, servicesStored.subSubCategorySelected?.id);
-            console.log('data de ArrayPublishers ', data)
-            setArrayPublishers(data);
+            console.log('data de ArrayPublishers ', data);
+            dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.subSubCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {

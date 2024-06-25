@@ -1,16 +1,18 @@
 import React from 'react'
-import useGeneralContext from '../hooks/useGeneralContext'
 import { View } from 'react-native';
 import { Publisher } from '../components/shared';
+import { useSelector } from "react-redux";
+
+
 
 const PublisherDetail = () => {
 
-  const { publisherDetail } = useGeneralContext();
+  const publisherStored =useSelector((state)=>state.publishers.value.publisher);
 
   return (
     <View>
-      {publisherDetail !== null &&
-        <Publisher item={publisherDetail} />
+      {publisherStored !== null &&
+        <Publisher item={publisherStored} />
       }
     </View>
 

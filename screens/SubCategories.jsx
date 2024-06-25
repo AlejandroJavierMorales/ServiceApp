@@ -7,17 +7,18 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setSubCategorySelected, setSubSubCategoriesSelected
 } from "../fetures/Services/ServicesSlice";
-
+import { setPublishers} from "../fetures/Publishers/PublishersSlice";
 
 
 const SubCategories = ({ navigation, route }) => {
 
-  const dataOfServerStored = useSelector((state) => state.dataOfServer.value)
-  const servicesStored = useSelector((state) => state.services.value)
+  const dataOfServerStored = useSelector((state) => state.dataOfServer.value);
+  const servicesStored = useSelector((state) => state.services.value);
+  const publishersStored =useSelector((state)=>state.publishers.value.publisher);
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
-  const { setSubscriptionsType, setActualPage, actualPage, setArrayPublishers } = useGeneralContext();
+  const { setSubscriptionsType, setActualPage, actualPage } = useGeneralContext();
 
   const isMounted = useRef(false);
 
@@ -56,7 +57,7 @@ const SubCategories = ({ navigation, route }) => {
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, null);
             console.log('data de ArrayPublishers ', data)
-            setArrayPublishers(data);
+            dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.subCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {
