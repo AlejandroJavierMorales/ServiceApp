@@ -3,33 +3,33 @@ import { View, Text, StyleSheet, FlatList, useWindowDimensions } from 'react-nat
 import { CardItem } from '../components/shared';
 import useGeneralContext from '../hooks/useGeneralContext';
 import fetchSubscriptions from '../utils/data/fetchSubscriptions';
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setSubCategorySelected, setSubSubCategoriesSelected
+} from "../fetures/Services/ServicesSlice";
 
 
 
 const SubCategories = ({ navigation, route }) => {
+
+  const dataOfServerStored = useSelector((state) => state.dataOfServer.value)
+  const servicesStored = useSelector((state) => state.services.value)
+  const dispatch = useDispatch();
+
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
-  const {
-    categories, setCategories,
-    subCategories, setSubCategories,
-    categorySelected, setCategorySelected,
-    subCategorySelected, setSubCategorySelected,
-    setDataOfServer, dataOfServer,
-    setSubCategoriesSelected, setSubscriptionsType,
-    subCategoriesSelected, setSubSubCategorySelected,
-    setActualPage, actualPage, setSubSubCategoriesSelected,
-    setArrayPublishers
-  } = useGeneralContext();
+  const { setSubscriptionsType, setActualPage, actualPage, setArrayPublishers } = useGeneralContext();
 
   const isMounted = useRef(false);
 
   const handleClickOnSubCategory = (item) => {
     console.log('****SubCategoria***** ', JSON.stringify(item, null, 2))
-    setSubCategorySelected(item);//Se actualiza y procesa en useEffect con categorySelected como dependencia
+    dispatch(setSubCategorySelected(item));//Se actualiza y procesa en useEffect con categorySelected como dependencia
   }
 
   const cardWidth = (width - 10) / 3; // Calcula el ancho de cada tarjeta para 3 tarjetas por fila
 
   useEffect(() => {
+
     const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
       try {
         const data = await fetchSubscriptions(categoryid, subcategoryid, subsubcategoryid);
@@ -41,24 +41,24 @@ const SubCategories = ({ navigation, route }) => {
 
     const loadPublishers = async () => {
       if (isMounted.current) {
-        const subSubcategoriesOfSubCategory = dataOfServer.filter((subCategory) => subCategory?.subcategoryid === subCategorySelected?.id
+        const subSubcategoriesOfSubCategory = dataOfServerStored.filter((subCategory) => subCategory?.subcategoryid == servicesStored.subCategorySelected?.id
         );
         console.log(
           "SUBCATEGORIAS DE LA SUBCATEGORIA " +
-          subCategorySelected?.name +
+          servicesStored.subCategorySelected?.name +
           " - " +
           JSON.stringify(subSubcategoriesOfSubCategory, null, 2)
         );
         if (subSubcategoriesOfSubCategory.length > 0 && subSubcategoriesOfSubCategory[0].subsubcategoryid) {
-          setSubSubCategoriesSelected(subSubcategoriesOfSubCategory);
-          navigation.navigate('SubSubCategories', subCategorySelected?.name);
+          dispatch(setSubSubCategoriesSelected(subSubcategoriesOfSubCategory));
+          navigation.navigate('SubSubCategories', servicesStored.subCategorySelected?.name);
         } else {
           try {
-            const data = await getPublishers(categorySelected?.id, subCategorySelected?.id, null);
+            const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, null);
             console.log('data de ArrayPublishers ', data)
             setArrayPublishers(data);
             setSubscriptionsType('categories');
-            navigation.navigate('PublishersList', `Servicios de ${subCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
+            navigation.navigate('PublishersList', `Servicios de ${servicesStored.subCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {
             console.error("Error while setting publishers: ", error);
           }
@@ -68,7 +68,7 @@ const SubCategories = ({ navigation, route }) => {
       }
     }
     loadPublishers();
-  }, [subCategorySelected]);
+  }, [servicesStored.subCategorySelected]);
 
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const SubCategories = ({ navigation, route }) => {
     <View style={styles.container}>
       <FlatList
         contentContainerStyle={styles.listCards}
-        data={subCategoriesSelected}
+        data={servicesStored.subCategoriesSelected}
         keyExtractor={(item) => item?.subcategoryid.toString()}
         renderItem={({ item }) => (
           <CardItem

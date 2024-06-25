@@ -4,6 +4,8 @@ import { StyleSheet } from 'react-native';
 import { useFonts } from "expo-font";
 import { GeneralContextProvider } from './context/GeneralContext';
 import Navigator from './navigation/Navigator';
+import { Provider } from "react-redux";
+import store from "./store";
 
 export default function App() {
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
@@ -18,9 +20,11 @@ export default function App() {
   }
 
   return (
-    <GeneralContextProvider>
-      <Navigator />
-    </GeneralContextProvider>
+    <Provider store={store}>
+      <GeneralContextProvider>
+        <Navigator />
+      </GeneralContextProvider>
+    </Provider>
   );
 }
 

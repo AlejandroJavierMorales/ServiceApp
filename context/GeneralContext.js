@@ -6,16 +6,8 @@ const GeneralContext = createContext();
 
 const GeneralContextProvider = ({ children }) => {
 
-    const [categories, setCategories] = useState([]);
-    const [subCategories, setSubCategories] = useState([]);
-    const [categorySelected, setCategorySelected] = useState(null);
-    const [subCategorySelected, setSubCategorySelected] = useState(null);
-    const [subSubCategorySelected, setSubSubCategorySelected] = useState(null);
-    const [subCategoriesSelected, setSubCategoriesSelected] = useState(null);
-    const [subSubCategoriesSelected, setSubSubCategoriesSelected] = useState(null);
     const [categoriesLeftJoinSubCategories, setCategoriesLeftJoinSubCategories] = useState([]);
     const [categoriesLeftJoinSubCategoriesLeftJoinSubSubCategories, setCategoriesLeftJoinSubCategoriesLeftJoinSubSubCategories] = useState([])
-    const [dataOfServer, setDataOfServer] = useState([]); //Datos traidos del server en la consulta a levantar la aplicacion
     const [viewCategories, setViewCategories] = useState(true); //Musetra/Oculta las cards de categorias
     const [viewSubCategories, setViewSubCategories] = useState(false) //Musetra/Oculta las cards de subCategorias
     const [viewSubSubCategories, setViewSubSubCategories] = useState(false)
@@ -40,16 +32,11 @@ const GeneralContextProvider = ({ children }) => {
 
     return (
         <GeneralContext.Provider value={{
-            categories, setCategories, subCategories, setSubCategories,
-            categorySelected, setCategorySelected, subCategorySelected, setSubCategorySelected,
             suscriptorSelected, setSuscriptorSelected, errorPromise, setErrorPromise,
-            subCategoriesSelected, setSubCategoriesSelected,
             categoriesLeftJoinSubCategories, setCategoriesLeftJoinSubCategories,
             categoriesLeftJoinSubCategoriesLeftJoinSubSubCategories, setCategoriesLeftJoinSubCategoriesLeftJoinSubSubCategories,
-            dataOfServer, setDataOfServer, viewCategories, setViewCategories,
-            subSubCategoriesSelected, setSubSubCategoriesSelected,
+            viewCategories, setViewCategories,
             viewSubCategories, setViewSubCategories,
-            subSubCategorySelected, setSubSubCategorySelected,
             viewSubSubCategories, setViewSubSubCategories,
             changeSubCategorySelected, setChangeSubCategorySelected,
             logged, setLogged,

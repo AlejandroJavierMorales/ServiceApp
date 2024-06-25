@@ -1,8 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeStackNavigator from './HomeStackNavigator'
-
-
 import { FontAwesome5 } from "@expo/vector-icons";
 import UserStackNavigator from './UserStackNavigator'
 import SearchStackNavigator from './SearchStackNavigator'
