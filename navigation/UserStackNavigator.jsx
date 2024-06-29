@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { User } from "../screens";
 import { Header } from "../components/shared";
+import ToDo from "../screens/ToDo";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -8,7 +10,7 @@ const Stack = createNativeStackNavigator();
 const UserStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="User"
+      initialRouteName="ToDo"
       screenOptions={ ({route})=> ({
         header: ({ navigation, route }) => {
           return (
@@ -16,7 +18,7 @@ const UserStackNavigator = () => {
               title={
                 route.name === 'User' 
                 ? "Perfil de usuario"
-                : 'User...'
+                : 'Registro de Tareas'
               }
               navigation={navigation} route={route}
             />
@@ -25,6 +27,7 @@ const UserStackNavigator = () => {
       })}
     >
       <Stack.Screen name="User" component={User} />
+      <Stack.Screen name="ToDo" component={ToDo} />
     </Stack.Navigator>
   );
 };
