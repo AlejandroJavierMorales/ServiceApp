@@ -7,8 +7,13 @@ export const todoApi = createApi({
   endpoints: (builder) => ({
     getTodos: builder.query({
       query: () => `todonotes.json`,
-      transformResponse: (response) =>
-        response ? Object.values(response) : [],
+      transformResponse: (response) => {
+        if (!response) return [];
+        return Object.keys(response).map(key => ({
+          ...response[key],
+          id: key, // Assigning Firebase-generated ID as `id` field
+        }));
+      },
     }),
     addTodo: builder.mutation({
       query: (newTodo) => ({

@@ -36,7 +36,7 @@ const Home = ({ navigation }) => {
 
   // Combinar los datos de categorías, subcategorías y subsubcategorías
   useEffect(() => {
-
+    
     dispatch(setData(formatRubrosData(categoriesData, subcategoriesData, subsubcategoriesData)));
 
   }, [categoriesData, subcategoriesData, subsubcategoriesData, dispatch]);

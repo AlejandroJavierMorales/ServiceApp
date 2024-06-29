@@ -17,10 +17,9 @@ const ToDo = () => {
 
   useEffect(() => {
     if (initialTodos.length > 0) {
-      // Ensure each todo has an ID
       const todosWithId = initialTodos.map((todo, index) => ({
         ...todo,
-        id: todo.id ?? index + 1, // Assign a sequential ID if none exists
+        id: todo.id ?? index + 1,
       }));
       setTodos(todosWithId);
     }
@@ -111,6 +110,12 @@ const ToDo = () => {
       });
   };
 
+  const handleCancelEdit = () => {
+    setNewTodo('');
+    setEditMode(false);
+    setEditId(null);
+  };
+
   const handleRefresh = () => {
     refetch();
   };
@@ -119,10 +124,10 @@ const ToDo = () => {
     <View style={styles.todoItem}>
       <Text style={styles.todoText}>{item.created_date} - {item.text}</Text>
       <TouchableOpacity onPress={() => handleStartEdit(item.id, item.text)}>
-        <Icon name="edit" size={20} color="green" style={styles.icon} />
+        <Icon name="edit" size={24} color="green" style={styles.icon} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleRemoveTodo(item.id)}>
-        <Icon name="trash" size={20} color="green" style={styles.icon} />
+        <Icon name="trash" size={24} color="red" style={styles.icon} />
       </TouchableOpacity>
     </View>
   );
@@ -136,16 +141,30 @@ const ToDo = () => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Add a new task"
+          placeholder="Escribe una nueva nota"
           value={newTodo}
           onChangeText={setNewTodo}
         />
-        <Button
-          title={editMode ? "Save Task" : "Add Task"}
-          onPress={editMode ? handleConfirmEdit : handleAddTodo}
-        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={editMode ? handleConfirmEdit : handleAddTodo}
+            style={styles.btnAddSave}
+          >
+            <Text style={styles.textButton}>{editMode ? "Guardar Tarea" : "Nueva Tarea"}</Text>
+        </TouchableOpacity>
+          {editMode && (
+            <TouchableOpacity
+              onPress={handleCancelEdit}
+              style={styles.btnCancelEdit}
+            > 
+            <Text style={styles.textButton}>Cancelar</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
+            <Icon name="refresh" size={21} color="white" />
+          </TouchableOpacity>
+        </View>
       </View>
-      <Button title="Refresh" onPress={handleRefresh} />
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
@@ -166,17 +185,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 16,
   },
   input: {
-    flex: 1,
+    width: '100%',
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 8,
-    marginRight: 8,
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  refreshButton: {
+    width:40,
+    height:40,
+    backgroundColor: 'green',
+    borderRadius: 50,
+    padding: 10,
   },
   todoItem: {
     flexDirection: 'row',
@@ -191,9 +220,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    marginLeft: 10,
+    marginLeft: 15,
   },
+  btnCancelEdit:{
+    borderRadius: 3,
+    backgroundColor: 'red',
+    paddingHorizontal:30,
+    paddingVertical:10,
+  },
+  btnAddSave:{
+    borderRadius: 3,
+    backgroundColor: '#24af63',//verde background
+    paddingHorizontal:30,
+    paddingVertical:10,
+    
+  },
+  textButton:{
+    color:'#ffff',
+
+  }
 });
 
 export default ToDo;
-

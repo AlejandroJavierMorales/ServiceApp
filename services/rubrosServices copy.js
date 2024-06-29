@@ -26,9 +26,9 @@ export const rubrosApi = createApi({
           const subsubcategoriesData = await subsubcategoriesResponse.json();
 
           // Verificar si los datos se cargaron correctamente
-          console.log("Categorías:", categoriesData);
+          /* console.log("Categorías:", categoriesData);
           console.log("Subcategorías:", subcategoriesData);
-          console.log("Subsubcategorías:", subsubcategoriesData);
+          console.log("Subsubcategorías:", subsubcategoriesData); */
 
           // Transformar y combinar los datos según la estructura deseada
           combinedData = [];
@@ -76,7 +76,6 @@ export const rubrosApi = createApi({
           console.error("Error al obtener datos:", error);
           throw error; // Lanzar el error para que sea manejado por RTK Query
         }
-        console.log('Datos combinados:', combinedData);
         return combinedData;
       },
     }),
