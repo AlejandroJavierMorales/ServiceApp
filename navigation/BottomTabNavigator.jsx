@@ -6,10 +6,15 @@ import UserStackNavigator from './UserStackNavigator'
 import SearchStackNavigator from './SearchStackNavigator'
 import { Header } from '../components/shared';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthStackNavigator from './AuthStackNavigator';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator()
 
 const BottomTabNavigator = () => {
+
+  const { user } = useSelector((state) => state.auth.value)
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -36,7 +41,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="UserTabScreen"
-        component={UserStackNavigator}
+        component={user ? UserStackNavigator : AuthStackNavigator}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

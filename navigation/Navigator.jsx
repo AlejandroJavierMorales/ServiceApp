@@ -11,8 +11,8 @@ const Navigator = () => {
   return (
     <NavigationContainer>
       {/* <HomeStackNavigator /> */}
-      {/* <BottomTabNavigator /> */}
-      {user ? <BottomTabNavigator/> : <AuthStackNavigator />}
+      <BottomTabNavigator />
+      {/* {user ? <BottomTabNavigator/> : <AuthStackNavigator />} */}
     </NavigationContainer>
   )
 }

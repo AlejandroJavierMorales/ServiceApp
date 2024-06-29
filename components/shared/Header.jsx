@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Text, Modal, Linking, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import useGeneralContext from '../../hooks/useGeneralContext';
+import { useSelector } from 'react-redux';
 
 const Header = ({ title = '', navigation, route }) => {
+    const { user } = useSelector((state) => state.auth.value);
     const [modalVisible, setModalVisible] = useState(false);
     const {
         setCategorySelected, setSubCategorySelected,
@@ -28,9 +30,9 @@ const Header = ({ title = '', navigation, route }) => {
         navigation.navigate('Home');
     }
 
-    useEffect(()=>{
-            console.log('Model: ', modalVisible)
-    },[modalVisible])
+    useEffect(() => {
+        console.log('Model: ', modalVisible);
+    }, [modalVisible]);
 
     return (
         <View>
@@ -57,6 +59,13 @@ const Header = ({ title = '', navigation, route }) => {
                     </TouchableOpacity>
                 )}
             </View>
+            {
+                user &&
+                <View style={styles.greenBarUser}>
+                    <Icon name="user" size={20} color="#000" />
+                    <Text style={styles.userNameText}>{`${user}`}</Text>
+                </View>
+            }
 
             <Modal
                 animationType="slide"
@@ -71,16 +80,16 @@ const Header = ({ title = '', navigation, route }) => {
                         <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
                             <Icon name="close" size={30} color="#000" />
                         </TouchableOpacity>
-                       { <TouchableOpacity style={styles.menuItem} onPress={() => {setModalVisible(false); navigation.navigate('HomeTabScreen'); }}>
+                        <TouchableOpacity style={styles.menuItem} onPress={() => { setModalVisible(false); navigation.navigate('HomeTabScreen'); }}>
                             <Icon name="home" size={20} color="#24af63" />
                             <Text style={styles.menuItemText}>Inicio</Text>
-                        </TouchableOpacity>}
-                        <TouchableOpacity style={styles.menuItem} onPress={() => {setModalVisible(false); navigation.navigate('UserTabScreen')}}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuItem} onPress={() => { setModalVisible(false); navigation.navigate('UserTabScreen') }}>
                             <Icon name="user" size={20} color="#24af63" />
                             <Text style={styles.menuItemText}>Usuario</Text>
                         </TouchableOpacity>
                         <View style={styles.divider}></View>
-                        <TouchableOpacity style={styles.menuItem} onPress={() => {setModalVisible(false);  navigation.navigate('SearchTabScreen')}}>
+                        <TouchableOpacity style={styles.menuItem} onPress={() => { setModalVisible(false); navigation.navigate('SearchTabScreen') }}>
                             <Icon name="search" size={20} color="#000" />
                             <Text style={styles.menuItemText}>Buscar</Text>
                         </TouchableOpacity>
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     greenBar: {
-        height: 60,
+        minHeight: 60,
         backgroundColor: '#24af63',
         width: '100%',
         flexDirection: 'row',
@@ -170,6 +179,19 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         padding: 10,
+    },
+    greenBarUser: {
+        backgroundColor:'rgba(177, 231, 197, 0.5)',
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'start',
+        justifyContent: 'start',
+        paddingVertical: 2,
+        paddingLeft: 10
+    },
+    userNameText: {
+        color:"#3a3a3a",
+        marginLeft: 10,
     },
 });
 
