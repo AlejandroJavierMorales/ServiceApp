@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(177, 231, 197, 0.5)', // Verde claro
+        backgroundColor: 'rgba(177, 231, 197, 0.5)',
     },
     modalContent: {
         width: 250,

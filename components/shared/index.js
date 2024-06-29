@@ -6,7 +6,8 @@ import PublisherRow from "./PublisherRow";
 import Publisher from "./Publisher";
 import ContactItem from "./ContactItem";
 import CarruselSwiper from "./CarruselSwiper";
-
+import InputForm from "./InputForm";
+import SubmitButton from "./SubmitButton";
 
 export {
     CardItem,
@@ -16,5 +17,7 @@ export {
     PublisherRow,
     Publisher,
     ContactItem,
-    CarruselSwiper
+    CarruselSwiper,
+    InputForm,
+    SubmitButton
 }
