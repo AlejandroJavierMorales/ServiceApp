@@ -5,17 +5,17 @@ import useGeneralContext from '../hooks/useGeneralContext';
 import fetchSubscriptions from '../utils/data/fetchSubscriptions';
 import { useDispatch, useSelector } from "react-redux";
 import { setSubSubCategorySelected } from "../fetures/Services/ServicesSlice";
-import { setPublishers} from "../fetures/Publishers/PublishersSlice";
+import { setPublishers } from "../fetures/Publishers/PublishersSlice";
 
 
 const SubSubCategories = ({ navigation, route }) => {
 
-
+  const { setActualPage, actualPage, setSubscriptionsType, subscriptions } = useGeneralContext();
   const servicesStored = useSelector((state) => state.services.value);
-  const publishersStored =useSelector((state)=>state.publishers.value.publishers);
+  const publishersStored = useSelector((state) => state.publishers.value.publishers);
   const dispatch = useDispatch();
 
-  const {setActualPage, actualPage, setSubscriptionsType} = useGeneralContext();
+
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
   const isMounted = useRef(false);
@@ -31,7 +31,7 @@ const SubSubCategories = ({ navigation, route }) => {
   useEffect(() => {
     const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
       try {
-        const data = await fetchSubscriptions(categoryid, subcategoryid, subsubcategoryid);
+        const data = await fetchSubscriptions(subscriptions, categoryid, subcategoryid, subsubcategoryid);
         return data;
       } catch (error) {
         console.error("Error fetching publishers: ", error);
@@ -50,9 +50,9 @@ const SubSubCategories = ({ navigation, route }) => {
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, servicesStored.subSubCategorySelected?.id);
             console.log('data de ArrayPublishers ', data);
-            dispatch(setPublishers(data));
+            data && dispatch(setPublishers(data));
             setSubscriptionsType('categories');
-            navigation.navigate('PublishersList', `Servicios de ${servicesStored.subSubCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
+            navigation.navigate('PublishersList', `Servicios de ${servicesStored.subSubCategorySelected?.name.split('_')?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {
             console.error("Error while setting publishers: ", error);
           }

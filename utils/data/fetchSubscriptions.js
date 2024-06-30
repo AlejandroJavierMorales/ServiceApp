@@ -1,6 +1,9 @@
-import subscriptions from './subscriptions.json';
+/* import useGeneralContext from '../../hooks/useGeneralContext'; */
+/* import subscriptions from './subscriptions.json'; */
 
-const fetchSubscriptions = async (category, subcategory, subsubcategory) => {
+const fetchSubscriptions = async (subscriptions, category, subcategory, subsubcategory) => {
+
+  /* const {subscriptions, setSubscritions} = useGeneralContext([]); */
 
   if(category === null && subsubcategory === null && subcategory === null) return [];
 

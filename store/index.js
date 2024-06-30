@@ -4,13 +4,14 @@ import servicesReducer from "../fetures/Services/ServicesSlice";
 import publishersReducer from "../fetures/Publishers/PublishersSlice";
 import authReducer from '../fetures/User/UserSlice';
 import todoReducer from '../fetures/ToDo/TodoSlice';
+import subscriptionsReducer from "../fetures/Subscriptions/SubscriptionsSlice";
 
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 import { rubrosApi } from "../services/rubrosServices";
-import { setupListeners } from "@reduxjs/toolkit/query";
 import { authApi } from "../services/authService";
 import { todoApi } from "../services/toDoService";
-
+import { subscriptionsApi } from "../services/subscriptionsService";
 
 const store = configureStore({
     reducer: {
@@ -18,18 +19,20 @@ const store = configureStore({
         services: servicesReducer,
         publishers: publishersReducer,
         auth: authReducer,
+        todo: todoReducer,
+        subscriptions: subscriptionsReducer,
         [rubrosApi.reducerPath]: rubrosApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
-        todo: todoReducer,
         [todoApi.reducerPath]: todoApi.reducer,
+        [subscriptionsApi.reducerPath]: subscriptionsApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
         .concat(rubrosApi.middleware)
         .concat(authApi.middleware)
         .concat(todoApi.middleware)
+        .concat(subscriptionsApi.middleware)
+});
 
-})
+setupListeners(store.dispatch);
 
-setupListeners(store.dispatch)
-
-export default store
+export default store;

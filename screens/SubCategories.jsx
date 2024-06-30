@@ -18,7 +18,7 @@ const SubCategories = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
-  const { setSubscriptionsType, setActualPage, actualPage } = useGeneralContext();
+  const { setSubscriptionsType, setActualPage, actualPage, subscriptions } = useGeneralContext();
 
   const isMounted = useRef(false);
 
@@ -33,7 +33,7 @@ const SubCategories = ({ navigation, route }) => {
 
     const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
       try {
-        const data = await fetchSubscriptions(categoryid, subcategoryid, subsubcategoryid);
+        const data = await fetchSubscriptions(subscriptions, categoryid, subcategoryid, subsubcategoryid);
         return data;
       } catch (error) {
         console.error("Error fetching publishers: ", error);
@@ -57,9 +57,9 @@ const SubCategories = ({ navigation, route }) => {
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, null);
             console.log('data de ArrayPublishers ', data)
-            dispatch(setPublishers(data));
+            data && dispatch(setPublishers(data));
             setSubscriptionsType('categories');
-            navigation.navigate('PublishersList', `Servicios de ${servicesStored.subCategorySelected?.name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
+            navigation.navigate('PublishersList', `Servicios de ${servicesStored.subCategorySelected?.name.split('_')?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {
             console.error("Error while setting publishers: ", error);
           }

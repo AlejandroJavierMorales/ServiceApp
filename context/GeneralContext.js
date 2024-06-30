@@ -27,6 +27,7 @@ const GeneralContextProvider = ({ children }) => {
     const [actualPage, setActualPage] = useState('home');
     const [scheduleItem, setScheduleItem] = useState(null);
     const [scheduledItems, setScheduledItems] = useState([]);
+    const [subscriptions, setSubscritions] = useState([]);
 
 
     return (
@@ -51,6 +52,7 @@ const GeneralContextProvider = ({ children }) => {
             actualPage, setActualPage,
             scheduleItem, setScheduleItem,
             scheduledItems, setScheduledItems,
+            subscriptions, setSubscritions
         }}>
             {children}
         </GeneralContext.Provider>

@@ -11,7 +11,7 @@ const PublishersList = ({ navigation, route }) => {
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
   
   const publishersStored =useSelector((state)=>state.publishers.value.publishers);
-  const publisherStored =useSelector((state)=>state.publishers.value.publisher);
+  const publisherStored =useSelector((state)=>state.publishers.value?.publisher);
   const dispatch = useDispatch();
 
   const onHandleLocation = (item)=>{
@@ -21,9 +21,9 @@ const PublishersList = ({ navigation, route }) => {
     console.log(JSON.stringify('Whatsapp '+item,null,2))
   }
   const onHandleDetail = (item)=>{
-    dispatch(setPublisher(item));
+    item && dispatch(setPublisher(item));
     navigation.navigate('PublisherDetail', item?.company_name);
-    console.log(JSON.stringify('Detail '+item,null,2))
+    console.log('Detail ' + JSON.stringify(item,null,2))
   }
 
   const cardWidth = (width - 10) / 3; // Calcula el ancho de cada tarjeta para 3 tarjetas por fila
