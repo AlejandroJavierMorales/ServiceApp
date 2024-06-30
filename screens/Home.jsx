@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, StyleSheet, FlatList, useWindowDimensions, ActivityIndicator, Text } from 'react-native';
 import { CardItem } from '../components/shared';
 import { GeneralContext } from '../context/GeneralContext';
@@ -8,7 +8,8 @@ import {
   setCategories,
   setSubCategories,
   setCategorySelected,
-  setSubCategoriesSelected
+  setSubCategoriesSelected,
+  setSubscriptions
 } from "../fetures/Services/ServicesSlice";
 import { setPublishers } from "../fetures/Publishers/PublishersSlice";
 import { useGetCategoriesQuery, useGetSubcategoriesQuery, useGetSubsubcategoriesQuery } from '../services/rubrosServices';
@@ -16,20 +17,23 @@ import fetchSubscriptions from '../utils/data/fetchSubscriptions';
 import { formatRubrosData } from '../utils/formatRubrosData';
 import { useGetPublishersQuery, useGetSubscriptions_TypeQuery, useGetSubscriptionsCategoriesQuery, useGetSubscriptionsQuery } from '../services/subscriptionsService';
 import { formatSubscriptionsData } from '../utils/data/formatSubscriptionsData';
-import useGeneralContext from '../hooks/useGeneralContext';
+
 
 
 const Home = ({ navigation }) => {
 
 
   const dataOfServerStored = useSelector((state) => state.dataOfServer.value);
+  //servicesStored guarda la info de categories, subcategories, subsubcategories, caterigorySelected, subCategorySeleted,
+  //subSubCategorySelected y subscriptions
   const servicesStored = useSelector((state) => state.services.value);
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions();
   const { setSubscriptionsType, setActualPage } = useContext(GeneralContext);
-  const {subscriptions, setSubscritions} = useGeneralContext([]);
+  const cardWidth = (width - 10) / 3;
 
+  //datos traidos de la base de datos  a traves de las API de RTK Query
   const { data: categoriesData, isLoading: isLoadingCategories, error: errorCategories } = useGetCategoriesQuery();
   const { data: subcategoriesData, isLoading: isLoadingSubcategories, error: errorSubcategories } = useGetSubcategoriesQuery();
   const { data: subsubcategoriesData, isLoading: isLoadingSubsubcategories, error: errorSubsubcategories } = useGetSubsubcategoriesQuery();
@@ -38,46 +42,25 @@ const Home = ({ navigation }) => {
   const { data: subscriptionsCategoriesData, isLoading: isLoadingSubscriptionsCategories, error: errorSubscriptionsCategories } = useGetSubscriptionsCategoriesQuery();
   const { data: subscriptionsTypeData, isLoading: isLoadingSubscriptionsType, error: errorSubscriptionsType } = useGetSubscriptions_TypeQuery();
 
-  const cardWidth = (width - 10) / 3;
 
-  // Combinar los datos de categorías, subcategorías y subsubcategorías
+  // Combina los datos de categorías, subcategorías y subsubcategorías y guarda el resultado en dataOfServer en el store
+  //generando un objeto por cada categoria, uno por cada categoria con su subcategoria y uno con cada subcategoria con cada subsubcategoria asociada
   useEffect(() => {
-
     dispatch(setData(formatRubrosData(categoriesData, subcategoriesData, subsubcategoriesData)));
-   
   }, [categoriesData, subcategoriesData, subsubcategoriesData, dispatch]);
 
+  //guarda en el store todas las subscribciones existentes y la asociacion al publisher correspondiente
+  //a partir de los datos traidos de la base de datos, se mandan a formatear para generar un objeto por cada subscripcion con todos los datos necesarios
   useEffect(() => {
-    setSubscritions(formatSubscriptionsData(categoriesData, subcategoriesData, subsubcategoriesData
-      , publishersData, subscriptionsData, subscriptionsCategoriesData, subscriptionsTypeData))
-
-    /*   console.log('**** publishers:  '+publishersData)
-      console.log('**** subscriptions:  '+subscriptionsData) */
+    dispatch(setSubscriptions(formatSubscriptionsData(categoriesData, subcategoriesData, subsubcategoriesData
+      , publishersData, subscriptionsData, subscriptionsCategoriesData, subscriptionsTypeData)))
 
   }, [publishersData, subscriptionsData, subscriptionsCategoriesData, subscriptionsTypeData])
 
-  useEffect(() => {
-    console.log('**** SUBSCRIPCIONES:  '+JSON.stringify(subscriptions,null,2))
-    
-  }, [subscriptions])
 
 
-  useEffect(() => {
-    if (publishersData) {
-      console.log('Publishers Data:', publishersData);
-    } else {
-      console.log('Publishers Data is undefined');
-    }
-  }, [publishersData]);
-  
-  useEffect(() => {
-    if (subscriptionsData) {
-      console.log('Subscriptions Data:', subscriptionsData);
-    } else {
-      console.log('Subscriptions Data is undefined');
-    }
-  }, [subscriptionsData]);
-
+  //genera la estructura del array que contiene todas las categorias, subcategorias y subsubcategorias y sus relaciones entre si
+  //se guarda en el store en dataOfServerStored
   useEffect(() => {
     if (dataOfServerStored && dataOfServerStored.length > 0) {
       const uniqueCategoriesMap = new Map();
@@ -96,6 +79,7 @@ const Home = ({ navigation }) => {
     }
   }, [dataOfServerStored, dispatch]);
 
+  //setea en el store la categoria seleciconada
   const handleClickOnCategory = (item) => {
     dispatch(setCategorySelected(item));
   };
@@ -110,8 +94,8 @@ const Home = ({ navigation }) => {
           navigation.navigate('SubCategories', servicesStored.categorySelected.name);
         } else {
           try {
-            const data = await fetchSubscriptions(subscriptions, servicesStored.categorySelected.id, null, null);
-           data && dispatch(setPublishers(data));
+            const data = await fetchSubscriptions(servicesStored.subscriptions, servicesStored.categorySelected.id, null, null);
+            data && dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.categorySelected.name.split('_')?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {
@@ -122,7 +106,7 @@ const Home = ({ navigation }) => {
     };
 
     loadPublishers();
-  }, [servicesStored.categorySelected, servicesStored.subCategories, dispatch, navigation]);
+  }, [servicesStored.subscriptions, servicesStored.categorySelected, servicesStored.subCategories, dispatch, navigation]);
 
   useEffect(() => {
     setActualPage('home');

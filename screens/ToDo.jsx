@@ -19,19 +19,19 @@ const ToDo = () => {
     if (initialTodos.length > 0) {
       const todosWithId = initialTodos.map((todo, index) => ({
         ...todo,
-        id: todo.id ?? index + 1,
+        id: todo?.id ?? index + 1,
       }));
       setTodos(todosWithId);
     }
   }, [initialTodos]);
 
-  const getNextId = () => {
+/*   const getNextId = () => {
     if (todos.length === 0) {
       return 1;
     }
-    const highestId = Math.max(...todos.map(todo => todo.id));
+    const highestId = Math.max(...todos.map(todo => todo?.id));
     return highestId + 1;
-  };
+  }; */
 
   const handleAddTodo = () => {
     if (newTodo.trim() !== '') {
@@ -40,7 +40,7 @@ const ToDo = () => {
         completed: false,
         created_date: new Date().toLocaleDateString('en-GB'),
         userId: user?.email,
-        id: getNextId(),
+        /* id: getNextId(), */
       };
 
       addTodo(newTodoObject).unwrap()
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   todoText: {
-    fontSize: 18,
+    fontSize: 14,
     flex: 1,
   },
   icon: {

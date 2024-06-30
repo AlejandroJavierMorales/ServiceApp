@@ -11,8 +11,9 @@ export const todoApi = createApi({
         if (!response) return [];
         return Object.keys(response).map(key => ({
           ...response[key],
-          id: key, // Assigning Firebase-generated ID as `id` field
-        }));
+          id: key, // asignando Firebase-generated ID como el campo `id`
+        }))
+        .sort((a, b) => b.id.localeCompare(a.id)); // Ordenando por id descendente
       },
     }),
     addTodo: builder.mutation({

@@ -18,7 +18,7 @@ const SubCategories = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
-  const { setSubscriptionsType, setActualPage, actualPage, subscriptions } = useGeneralContext();
+  const { setSubscriptionsType, setActualPage, actualPage } = useGeneralContext();
 
   const isMounted = useRef(false);
 
@@ -33,7 +33,7 @@ const SubCategories = ({ navigation, route }) => {
 
     const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
       try {
-        const data = await fetchSubscriptions(subscriptions, categoryid, subcategoryid, subsubcategoryid);
+        const data = await fetchSubscriptions(servicesStored.subscriptions, categoryid, subcategoryid, subsubcategoryid);
         return data;
       } catch (error) {
         console.error("Error fetching publishers: ", error);

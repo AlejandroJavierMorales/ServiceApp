@@ -12,7 +12,8 @@ export const servicesSlice = createSlice({
         subSubCategoriesSelected:null,
         categorySelected:null,
         subCategorySelected:null,
-        subSubCategorySelected:null
+        subSubCategorySelected:null,
+        subscriptions:[] //guarda todas las subscripciones de publishers de todos los rubros 
       },
     },
     reducers: {
@@ -40,6 +41,9 @@ export const servicesSlice = createSlice({
       setSubSubCategorySelected: (state, action) => {
         state.value.subSubCategorySelected = action.payload;
       },
+      setSubscriptions: (state, action) => {
+        state.value.subscriptions = action.payload;
+      },
     },
   });
   
@@ -51,6 +55,7 @@ export const servicesSlice = createSlice({
     setSubSubCategoriesSelected,
     setCategorySelected,
     setSubCategorySelected,
-    setSubSubCategorySelected
+    setSubSubCategorySelected,
+    setSubscriptions
 } = servicesSlice.actions;
   export default servicesSlice.reducer;

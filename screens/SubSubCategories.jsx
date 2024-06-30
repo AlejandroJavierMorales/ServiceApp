@@ -10,7 +10,7 @@ import { setPublishers } from "../fetures/Publishers/PublishersSlice";
 
 const SubSubCategories = ({ navigation, route }) => {
 
-  const { setActualPage, actualPage, setSubscriptionsType, subscriptions } = useGeneralContext();
+  const { setActualPage, actualPage, setSubscriptionsType } = useGeneralContext();
   const servicesStored = useSelector((state) => state.services.value);
   const publishersStored = useSelector((state) => state.publishers.value.publishers);
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const SubSubCategories = ({ navigation, route }) => {
   useEffect(() => {
     const getPublishers = async (categoryid, subcategoryid, subsubcategoryid) => {
       try {
-        const data = await fetchSubscriptions(subscriptions, categoryid, subcategoryid, subsubcategoryid);
+        const data = await fetchSubscriptions(servicesStored.subscriptions, categoryid, subcategoryid, subsubcategoryid);
         return data;
       } catch (error) {
         console.error("Error fetching publishers: ", error);
