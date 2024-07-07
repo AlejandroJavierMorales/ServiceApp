@@ -11,7 +11,7 @@ import SubmitButton from "./SubmitButton";
 import SearchTool from "./SearchTool";
 import LocationMap from "./LocationMap";
 import AddButton from "./AddButton";
-
+import ImageSelector from "./ImageSelector";
 
 export {
     CardItem,
@@ -26,5 +26,6 @@ export {
     SubmitButton,
     SearchTool,
     LocationMap,
-    AddButton
+    AddButton,
+    ImageSelector
 }

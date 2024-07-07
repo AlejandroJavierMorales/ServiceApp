@@ -46,7 +46,7 @@ const Header = ({ title = '', navigation, route }) => {
                     onPress: () => {
                         dispatch(clearUser());
                         // Navegar a la pantalla de ToDo
-                        navigation.navigate('ToDo');
+                        navigation.navigate('UserTabScreen');
                     }
                 }
             ],
@@ -91,15 +91,15 @@ const Header = ({ title = '', navigation, route }) => {
                             <Text style={styles.userNameText}>{`${user}`}</Text>
                             <View style={styles.spacer} />
 
-                            <TouchableOpacity onPress={()=>{navigation.navigate('User')}} style={styles.iconButton}>
-                                <Icon name="user" size={22} color="#000" />
+                            <TouchableOpacity onPress={()=>{navigation.navigate('User')}} style={[styles.iconButton, { marginRight: 5 }]}>
+                                <Icon name="user-circle" size={24} color="#000" />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>{navigation.navigate('ToDo')}} style={styles.iconButton}>
-                                <Icon name="user" size={22} color="#000" />
+                            <TouchableOpacity onPress={()=>{navigation.navigate('ToDo')}} style={[styles.iconButton, { marginRight: 15 }]}>
+                                <Icon name="sticky-note" size={24} color="#000" />
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={handleLogout} style={styles.iconButton}>
-                                <Icon name="sign-out" size={22} color="#000" />
+                                <Icon name="sign-out" size={24} color="#000" />
                             </TouchableOpacity>
                         </View>
                     )

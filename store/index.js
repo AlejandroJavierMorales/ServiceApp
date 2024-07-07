@@ -4,6 +4,7 @@ import servicesReducer from "../fetures/Services/ServicesSlice";
 import publishersReducer from "../fetures/Publishers/PublishersSlice";
 import authReducer from '../fetures/User/UserSlice';
 import todoReducer from '../fetures/ToDo/TodoSlice';
+import userReducer from '../fetures/User/UserSlice'
 import subscriptionsReducer from "../fetures/Subscriptions/SubscriptionsSlice";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
@@ -21,6 +22,7 @@ const store = configureStore({
         publishers: publishersReducer,
         auth: authReducer,
         todo: todoReducer,
+        userData: userReducer,
         subscriptions: subscriptionsReducer,
         [rubrosApi.reducerPath]: rubrosApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
