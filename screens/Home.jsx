@@ -62,7 +62,7 @@ const Home = ({ navigation }) => {
   //genera la estructura del array que contiene todas las categorias, subcategorias y subsubcategorias y sus relaciones entre si
   //se guarda en el store en dataOfServerStored
   useEffect(() => {
-    if (dataOfServerStored && dataOfServerStored.length > 0) {
+    if (dataOfServerStored && dataOfServerStored?.length > 0) {
       const uniqueCategoriesMap = new Map();
       const uniqueSubCategoriesMap = new Map();
 
@@ -89,7 +89,7 @@ const Home = ({ navigation }) => {
       if (servicesStored.categorySelected?.id) {
         const subcategoriesOfCategory = servicesStored.subCategories.filter(category => category.categoryid === servicesStored.categorySelected.id);
 
-        if (subcategoriesOfCategory.length > 0 && subcategoriesOfCategory[0].subcategoryid) {
+        if (subcategoriesOfCategory?.length > 0 && subcategoriesOfCategory[0].subcategoryid) {
           dispatch(setSubCategoriesSelected(subcategoriesOfCategory));
           navigation.navigate('SubCategories', servicesStored.categorySelected.name);
         } else {

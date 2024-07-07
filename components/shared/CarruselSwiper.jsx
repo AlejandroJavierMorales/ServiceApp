@@ -10,10 +10,9 @@ const carouselData = [
   { uri: 'https://calamuchita.ar/assets/images/cities/losreartes1.webp' },
   { uri: 'https://calamuchita.ar/assets/images/cities/losreartes2.webp' },
   { uri: 'https://calamuchita.ar/assets/images/cities/losreartes3.webp' },
-  // Agrega más imágenes según sea necesario
-];
-
-const CarruselSwiper = () => {
+  // Modificar funcionamiento para que si el publisher o subscription tiene images=true traiga sus imagenes de la web
+]
+const CarruselSwiper = (images=[]) => {
   return (
     <View style={styles.container}>
       <Swiper
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     marginTop:20
   },
   wrapper: {
-    height: 300, // Altura fija para el carrusel (puedes ajustarla según tus necesidades)
+    height: 300, 
   },
   slide: {
     flex: 1,

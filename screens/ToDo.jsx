@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { useGetTodosQuery, useAddTodoMutation, useRemoveTodoMutation, useEditTodoMutation } from '../services/toDoService';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   inputContainer: {
-    marginBottom: 16,
+    marginTop:15,
+    marginBottom: 25,
   },
   input: {
     width: '100%',
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
   refreshButton: {
     width:40,
     height:40,
-    backgroundColor: 'green',
+    backgroundColor: '#24af63',
     borderRadius: 50,
     padding: 10,
   },

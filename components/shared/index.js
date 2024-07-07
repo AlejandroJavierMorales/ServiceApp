@@ -8,6 +8,9 @@ import ContactItem from "./ContactItem";
 import CarruselSwiper from "./CarruselSwiper";
 import InputForm from "./InputForm";
 import SubmitButton from "./SubmitButton";
+import SearchTool from "./SearchTool";
+import LocationMap from "./LocationMap";
+
 
 export {
     CardItem,
@@ -19,5 +22,7 @@ export {
     ContactItem,
     CarruselSwiper,
     InputForm,
-    SubmitButton
+    SubmitButton,
+    SearchTool,
+    LocationMap
 }

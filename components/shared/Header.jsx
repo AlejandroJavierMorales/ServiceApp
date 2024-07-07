@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Text, Modal, Linking, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import useGeneralContext from '../../hooks/useGeneralContext';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearUser } from '../../fetures/User/UserSlice';
 
 const Header = ({ title = '', navigation, route }) => {
     const { user } = useSelector((state) => state.auth.value);
+    const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
     const {
         setCategorySelected, setSubCategorySelected,
@@ -29,6 +31,28 @@ const Header = ({ title = '', navigation, route }) => {
     const onHomePress = () => {
         navigation.navigate('Home');
     }
+
+    const handleLogout = () => {
+        Alert.alert(
+            "Confirmación",
+            "¿Seguro que quieres cerrar sesión?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Cerrar Sesión",
+                    onPress: () => {
+                        dispatch(clearUser());
+                        // Navegar a la pantalla de ToDo
+                        navigation.navigate('ToDo');
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
+    };
 
     useEffect(() => {
         console.log('Model: ', modalVisible);
@@ -59,13 +83,20 @@ const Header = ({ title = '', navigation, route }) => {
                     </TouchableOpacity>
                 )}
             </View>
-            {
-                user &&
-                <View style={styles.greenBarUser}>
-                    <Icon name="user" size={20} color="#000" />
-                    <Text style={styles.userNameText}>{`${user}`}</Text>
-                </View>
-            }
+            <View style={styles.greenBarUser}>
+                {
+                    user && (
+                        <View style={styles.greenBarUserLogged}>
+                            <Icon name="user" size={20} color="#000" />
+                            <Text style={styles.userNameText}>{`${user}`}</Text>
+                            <View style={styles.spacer} />
+                            <TouchableOpacity onPress={handleLogout} style={styles.iconButton}>
+                                <Icon name="sign-out" size={22} color="#000" />
+                            </TouchableOpacity>
+                        </View>
+                    )
+                }
+            </View>
 
             <Modal
                 animationType="slide"
@@ -181,17 +212,27 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     greenBarUser: {
-        backgroundColor:'rgba(177, 231, 197, 0.5)',
+        backgroundColor: 'rgba(177, 231, 197, 0.5)',
         width: '100%',
         flexDirection: 'row',
-        alignItems: 'start',
-        justifyContent: 'start',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
         paddingVertical: 2,
-        paddingLeft: 10
+        paddingLeft: 10,
+    },
+    greenBarUserLogged: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: 10,
+        width: '100%',
     },
     userNameText: {
-        color:"#3a3a3a",
+        color: "#3a3a3a",
         marginLeft: 10,
+    },
+    spacer: {
+        flex: 1,
     },
 });
 

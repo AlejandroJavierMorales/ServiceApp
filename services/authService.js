@@ -19,7 +19,13 @@ export const authApi = createApi({
         body: auth,
       }),
     }),
+    // No se necesita una query real para el logout si sólo limpia el estado local
+    logout: builder.mutation({
+      queryFn: () => {
+        return { data: null };
+      },
+    }),
   }),
 });
 
-export const { useSignInMutation, useSignUpMutation } = authApi;
+export const { useSignInMutation, useSignUpMutation, useLogoutMutation } = authApi;
