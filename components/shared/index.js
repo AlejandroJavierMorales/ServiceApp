@@ -10,7 +10,7 @@ import InputForm from "./InputForm";
 import SubmitButton from "./SubmitButton";
 import SearchTool from "./SearchTool";
 import LocationMap from "./LocationMap";
-import AddButton from "./AddButton";
+import CustomButton from "./CustomButton";
 import ImageSelector from "./ImageSelector";
 
 export {
@@ -26,6 +26,6 @@ export {
     SubmitButton,
     SearchTool,
     LocationMap,
-    AddButton,
+    CustomButton,
     ImageSelector
 }

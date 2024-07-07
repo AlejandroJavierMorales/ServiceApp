@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 const UserStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="ToDo"
+      initialRouteName="User"
       screenOptions={ ({route})=> ({
         header: ({ navigation, route }) => {
           return (

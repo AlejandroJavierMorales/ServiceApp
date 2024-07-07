@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Pressable, Modal, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, Modal, TextInput, Button, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AddButton } from '../components/shared';
+import { AddButton, CustomButton } from '../components/shared';
 import { useGetProfileImageQuery, useGetUserDataQuery, useUpdateUserDataMutation } from '../services/userService';
+import * as ImagePicker from 'expo-image-picker';
+import { uploadImageToFirebaseStorage } from '../databases/uploadImageToFirebaseStorage';
 import { setUserData } from '../fetures/User/UserSlice';
 
 const User = ({ navigation }) => {
-  const { imageCamera, localId, user } = useSelector((state) => state.auth.value);
+  const { user } = useSelector((state) => state.auth.value);
   const { data: users, error: userError, isLoading: isUserLoading } = useGetUserDataQuery();
-  const { data: imageFromBase, error: imageError, isLoading: isImageLoading } = useGetProfileImageQuery(localId);
   const [userProfile, setUserProfile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editData, setEditData] = useState({});
@@ -17,11 +18,9 @@ const User = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(JSON.stringify(users));
     if (users) {
       const currentUser = users.find(u => u.email === user);
       if (currentUser) {
-        console.log('Usuario:', JSON.stringify(currentUser));
         setUserProfile(currentUser);
         setEditData(currentUser); // Inicializa los datos de edición con la información del usuario
       } else {
@@ -33,21 +32,64 @@ const User = ({ navigation }) => {
     }
   }, [users, user, userError]);
 
-  useEffect(() => {
-    if (imageFromBase) {
-      console.log('Imagen de perfil:', imageFromBase.image);
-    }
-    if (imageError) {
-      console.error('Error al obtener imagen de perfil:', imageError);
-    }
-  }, [imageFromBase, imageError]);
+  const selectImageFromGallery = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === 'granted') {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+      });
 
-  const launchCamera = async () => {
-    navigation.navigate("Image Selector");
+      if (!result.canceled && result.assets[0]?.uri) {
+        const imageUri = result.assets[0]?.uri;
+        try {
+          const downloadURL = await uploadImageToFirebaseStorage(imageUri, user);  // Usa el email del usuario en lugar de localId
+          await updateUserData({ id: userProfile.id, profileimage: downloadURL, ...editData });  // Actualiza la imagen en la base de datos
+          dispatch(setUserData({ ...editData, profileimage: downloadURL }));  // Actualiza el estado del usuario
+          setUserProfile({ ...userProfile, profileimage: downloadURL });  // Actualiza el perfil local
+        } catch (error) {
+          console.error('Error al subir la imagen:', error);
+        }
+      }
+    } else {
+      Alert.alert('Permission Required', 'You need to grant permission to access the gallery.');
+    }
   };
 
-  const launchLocation = async () => {
-    navigation.navigate("List Address");
+  const launchCamera = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status === 'granted') {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets[0]?.uri) {
+        const imageUri = result.assets[0]?.uri;
+        try {
+          const downloadURL = await uploadImageToFirebaseStorage(imageUri, user);  // Usa el email del usuario en lugar de localId
+          await updateUserData({ id: userProfile.id, profileimage: downloadURL, ...editData });  // Actualiza la imagen en la base de datos
+          dispatch(setUserData({ ...editData, profileimage: downloadURL }));  // Actualiza el estado del usuario
+          setUserProfile({ ...userProfile, profileimage: downloadURL });  // Actualiza el perfil local
+        } catch (error) {
+          console.error('Error al subir la imagen:', error);
+        }
+      }
+    } else {
+      Alert.alert('Permission Required', 'You need to grant permission to access the camera.');
+    }
+  };
+
+  const openImagePickerModal = () => {
+    Alert.alert(
+      'Seleccioner Imagen de Perfil',
+      'Puede tomar una foto con la cámara o escoger una imagen almacenada en el teléfono',
+      [
+        { text: 'Camara', onPress: launchCamera },
+        { text: 'Galería', onPress: selectImageFromGallery },
+        { text: 'Cancelar', style: 'cancel' },
+      ]
+    );
   };
 
   const handleEdit = () => {
@@ -69,33 +111,20 @@ const User = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {imageFromBase || imageCamera ? (
-        <Image
-          source={{ uri: imageFromBase?.image || imageCamera }}
-          style={styles.img}
-          resizeMode="cover"
-        />
-      ) : (
-        <Image
-          style={styles.img}
-          resizeMode="cover"
-          source={defaultImageRoute}
-        />
-      )}
-      <AddButton
-        onPress={launchCamera}
-        title={
-          imageFromBase || imageCamera
-            ? "Modify profile picture"
-            : "Add profile picture"
-        }
+      {/* <Text>{userProfile?.profileimage}</Text> */}
+      <Image
+        source={typeof userProfile?.profileimage === 'string' && userProfile?.profileimage ? { uri: userProfile?.profileimage } : defaultImageRoute}
+        style={styles.img}
+        resizeMode="cover"
       />
-      <AddButton title="My address" onPress={launchLocation} />
+      <Pressable style={styles.editImageButton} onPress={openImagePickerModal}>
+        <Icon name="edit" size={32} color="#24af63" />
+      </Pressable>
 
       {isUserLoading ? (
         <Text>Loading user data...</Text>
       ) : (
-        <View>
+        <View style={styles.userDataContainer}>
           <View style={styles.infoRow}>
             <Icon name="user" size={24} color="#000" />
             <Text>{`${userProfile?.firstname} ${userProfile?.lastname}`}</Text>
@@ -116,136 +145,124 @@ const User = ({ navigation }) => {
             <Icon name="sticky-note" size={24} color="#000" />
             <Text>{`${userProfile?.obs}`}</Text>
           </View>
-          {/* Icono de editar al final del View */}
           <Pressable style={styles.editButton} onPress={handleEdit}>
             <Icon name="edit" size={32} color="#24af63" />
           </Pressable>
         </View>
       )}
 
-      {/* Modal para editar los datos del usuario */}
       <Modal
-        transparent={true}
-        animationType="slide"
         visible={showModal}
+        animationType="slide"
         onRequestClose={() => setShowModal(false)}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Edit User Data</Text>
-            <TextInput
-              style={styles.modalInput}
-              placeholder="First Name"
-              value={editData.firstname}
-              onChangeText={(text) => setEditData({ ...editData, firstname: text })}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Last Name"
-              value={editData.lastname}
-              onChangeText={(text) => setEditData({ ...editData, lastname: text })}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Street"
-              value={editData.street}
-              onChangeText={(text) => setEditData({ ...editData, street: text })}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="City"
-              value={editData.city}
-              onChangeText={(text) => setEditData({ ...editData, city: text })}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="State"
-              value={editData.state}
-              onChangeText={(text) => setEditData({ ...editData, state: text })}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Whatsapp"
-              value={editData.whatsapp}
-              onChangeText={(text) => setEditData({ ...editData, whatsapp: text })}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Observations"
-              value={editData.obs}
-              onChangeText={(text) => setEditData({ ...editData, obs: text })}
-            />
-            <Button title="Save Changes" onPress={handleSave} color="#24af63" />
-            <Button title="Cancel" onPress={() => setShowModal(false)} color="#ff4d4d" />
-          </View>
+          <Text style={styles.modalTitle}>Editar Datos de Usuario</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="First Name"
+            value={editData.firstname}
+            onChangeText={(text) => setEditData({ ...editData, firstname: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Last Name"
+            value={editData.lastname}
+            onChangeText={(text) => setEditData({ ...editData, lastname: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Street"
+            value={editData.street}
+            onChangeText={(text) => setEditData({ ...editData, street: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="City"
+            value={editData.city}
+            onChangeText={(text) => setEditData({ ...editData, city: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="State"
+            value={editData.state}
+            onChangeText={(text) => setEditData({ ...editData, state: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="WhatsApp"
+            value={editData.whatsapp}
+            onChangeText={(text) => setEditData({ ...editData, whatsapp: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Observations"
+            value={editData.obs}
+            onChangeText={(text) => setEditData({ ...editData, obs: text })}
+          />
+          <CustomButton title='Guardar' onPress={handleSave} />
+          <CustomButton title='Cancelar' onPress={() => setShowModal(false)} backgroundColor='white' textColor='green' />
+
         </View>
       </Modal>
     </View>
   );
 };
 
-export default User;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    padding: 20,
   },
   img: {
-    height: 200,
     width: 200,
+    height: 200,
     borderRadius: 100,
+    marginBottom: 20,
   },
-  btn: {
-    marginTop: 10,
-    backgroundColor: "green",
-    width: "80%",
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 7,
-    borderRadius: 5,
+  editImageButton: {
+    position: 'absolute',
+    top: 210,
+    right: 120,
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 5,
-    gap: 6
+    gap: 10
   },
   editButton: {
+
+    marginLeft: 120,
     marginTop: 10,
-    alignItems: 'flex-end',
-    width: '100%',
-    paddingHorizontal: 20,
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
     padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  modalInput: {
-    height: 40,
-    borderColor: '#ddd',
+    justifyContent: 'center',
+    margin: 20,
+    borderColor: 'green',
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    backgroundColor: 'rgba(177, 231, 197, 0.5)'
   },
+  modalTitle: {
+    fontSize: 24,
+    marginBottom: 30,
+    textAlign: 'center'
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingLeft: 10,
+    borderRadius: 5
+  },
+  userDataContainer: {
+    marginTop: 40,
+  }
 });
+
+export default User;
