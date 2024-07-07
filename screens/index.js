@@ -6,6 +6,7 @@ import PublisherDetail from "./PublisherDetail";
 import User from "./User";
 import Search from "./Search";
 import Publish from "./Publish";
+import LocationScreen from "./LocationScreen";
 
 export {
     Home,
@@ -15,5 +16,6 @@ export {
     PublisherDetail,
     User,
     Search,
-    Publish
+    Publish,
+    LocationScreen
 }

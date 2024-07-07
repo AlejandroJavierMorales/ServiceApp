@@ -90,6 +90,14 @@ const Header = ({ title = '', navigation, route }) => {
                             <Icon name="user" size={20} color="#000" />
                             <Text style={styles.userNameText}>{`${user}`}</Text>
                             <View style={styles.spacer} />
+
+                            <TouchableOpacity onPress={()=>{navigation.navigate('User')}} style={styles.iconButton}>
+                                <Icon name="user" size={22} color="#000" />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>{navigation.navigate('ToDo')}} style={styles.iconButton}>
+                                <Icon name="user" size={22} color="#000" />
+                            </TouchableOpacity>
+
                             <TouchableOpacity onPress={handleLogout} style={styles.iconButton}>
                                 <Icon name="sign-out" size={22} color="#000" />
                             </TouchableOpacity>

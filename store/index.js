@@ -12,6 +12,7 @@ import { rubrosApi } from "../services/rubrosServices";
 import { authApi } from "../services/authService";
 import { todoApi } from "../services/toDoService";
 import { subscriptionsApi } from "../services/subscriptionsService";
+import { userApi } from "../services/userService";
 
 const store = configureStore({
     reducer: {
@@ -25,12 +26,14 @@ const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         [todoApi.reducerPath]: todoApi.reducer,
         [subscriptionsApi.reducerPath]: subscriptionsApi.reducer,
+        [userApi.reducerPath]: userApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
         .concat(rubrosApi.middleware)
         .concat(authApi.middleware)
         .concat(todoApi.middleware)
         .concat(subscriptionsApi.middleware)
+        .concat(userApi.middleware)
 });
 
 setupListeners(store.dispatch);

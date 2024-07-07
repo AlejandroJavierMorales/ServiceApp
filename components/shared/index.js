@@ -10,6 +10,7 @@ import InputForm from "./InputForm";
 import SubmitButton from "./SubmitButton";
 import SearchTool from "./SearchTool";
 import LocationMap from "./LocationMap";
+import AddButton from "./AddButton";
 
 
 export {
@@ -24,5 +25,6 @@ export {
     InputForm,
     SubmitButton,
     SearchTool,
-    LocationMap
+    LocationMap,
+    AddButton
 }
