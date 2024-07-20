@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Pressable, Modal, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, Modal, TextInput, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AddButton, CustomButton } from '../components/shared';
-import { useGetProfileImageQuery, useGetUserDataQuery, useUpdateUserDataMutation } from '../services/userService';
+import { CustomButton } from '../components/shared';
+import { useGetUserDataQuery, useUpdateUserDataMutation } from '../services/userService';
 import * as ImagePicker from 'expo-image-picker';
+import * as Camera from 'expo-camera';
 import { uploadImageToFirebaseStorage } from '../databases/uploadImageToFirebaseStorage';
 import { setUserData } from '../fetures/User/UserSlice';
 
@@ -32,6 +33,19 @@ const User = ({ navigation }) => {
     }
   }, [users, user, userError]);
 
+  useEffect(() => {
+    checkPermissions();
+  }, []);
+
+  const checkPermissions = async () => {
+    const cameraStatus = await Camera.requestCameraPermissionsAsync();
+    const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (cameraStatus.status !== 'granted' || mediaLibraryStatus.status !== 'granted') {
+      Alert.alert('Permisos requeridos', 'Necesitas otorgar permisos para acceder a la cámara y la galería.');
+    }
+  };
+
   const selectImageFromGallery = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === 'granted') {
@@ -41,11 +55,11 @@ const User = ({ navigation }) => {
       });
 
       if (!result.canceled && result.assets[0]?.uri) {
-        const imageUri = result.assets[0]?.uri;
-        console.log('Image URI from gallery:', imageUri); // Debugging log
+        const imageUri = result.assets[0].uri;
+        console.log('Image URI from gallery:', imageUri);
         try {
           const downloadURL = await uploadImageToFirebaseStorage(imageUri, user);
-          await updateUserData({ ...editData, id: userProfile.id, profileimage: downloadURL  });
+          await updateUserData({ id: userProfile.id, profileimage: downloadURL, ...editData });
           dispatch(setUserData({ ...editData, profileimage: downloadURL }));
           setUserProfile({ ...userProfile, profileimage: downloadURL });
         } catch (error) {
@@ -58,18 +72,23 @@ const User = ({ navigation }) => {
   };
 
   const launchCamera = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status } = await Camera.requestCameraPermissionsAsync();
     if (status === 'granted') {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
       });
 
-      if (!result.canceled && result.assets[0]?.uri) {
-        const imageUri = result.assets[0]?.uri;
+      if (result.canceled) {
+        console.log('User cancelled image picker');
+      } else if (!result.assets || !result.assets[0]?.uri) {
+        console.log('No image found or no URI available');
+      } else {
+        const imageUri = result.assets[0].uri;
+        console.log('Image URI from camera:', imageUri);
         try {
           const downloadURL = await uploadImageToFirebaseStorage(imageUri, user);
-          await updateUserData({...editData, id: userProfile.id, profileimage: downloadURL });
+          await updateUserData({ id: userProfile.id, profileimage: downloadURL, ...editData });
           dispatch(setUserData({ ...editData, profileimage: downloadURL }));
           setUserProfile({ ...userProfile, profileimage: downloadURL });
         } catch (error) {
@@ -83,10 +102,10 @@ const User = ({ navigation }) => {
 
   const openImagePickerModal = () => {
     Alert.alert(
-      'Seleccioner Imagen de Perfil',
+      'Seleccionar Imagen de Perfil',
       'Puede tomar una foto con la cámara o escoger una imagen almacenada en el teléfono',
       [
-        { text: 'Camara', onPress: launchCamera },
+        { text: 'Cámara', onPress: launchCamera },
         { text: 'Galería', onPress: selectImageFromGallery },
         { text: 'Cancelar', style: 'cancel' },
       ]
@@ -201,7 +220,7 @@ const User = ({ navigation }) => {
             onChangeText={(text) => setEditData({ ...editData, obs: text })}
           />
           <CustomButton title='Guardar' onPress={handleSave} />
-          <CustomButton title='Cancelar' onPress={() => setShowModal(false)} backgroundColor='white' textColor='green' />
+          <CustomButton title='Cancelar' onPress={() => setShowModal(false)} backgroundColor='gray' />
         </View>
       </Modal>
     </View>
@@ -212,55 +231,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: 20,
+    justifyContent: 'center',
   },
   img: {
     width: 200,
     height: 200,
     borderRadius: 100,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   editImageButton: {
     position: 'absolute',
-    top: 210,
-    right: 120,
+    top: 160,
+    left: 120,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 5,
+  },
+  userDataContainer: {
+    alignItems: 'center',
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 5,
-    gap: 10
   },
   editButton: {
-    marginLeft: 120,
-    marginTop: 10,
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 5,
   },
   modalContainer: {
     flex: 1,
-    padding: 20,
     justifyContent: 'center',
-    margin: 20,
-    borderColor: 'green',
-    borderWidth: 1,
-    borderRadius: 5,
-    backgroundColor: 'rgba(177, 231, 197, 0.5)'
+    padding: 20,
   },
   modalTitle: {
     fontSize: 24,
-    marginBottom: 30,
-    textAlign: 'center'
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
     marginBottom: 10,
-    paddingLeft: 10,
-    borderRadius: 5
   },
-  userDataContainer: {
-    marginTop: 40,
-  }
 });
 
 export default User;

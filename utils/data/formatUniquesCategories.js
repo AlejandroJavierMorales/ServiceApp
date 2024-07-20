@@ -1,8 +1,7 @@
 const formatUniqueCategories = (dataArrayOfCategoriesSubCategoriesAndSubSubCategories) => {
-    console.log('Me llega****************: ', dataArrayOfCategoriesSubCategoriesAndSubSubCategories)
     
     const flatArray = [];
-
+    
     if (dataArrayOfCategoriesSubCategoriesAndSubSubCategories?.length > 0) {
         dataArrayOfCategoriesSubCategoriesAndSubSubCategories.forEach((item, index) => {
             const { categoryid, category, categoryimage, subcategoryid, subcategory, subsubcategoryid, subsubcategory } = item;

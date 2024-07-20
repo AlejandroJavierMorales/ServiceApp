@@ -20,44 +20,6 @@ const Publisher = ({ item }) => {
 
     const image = `https://calamuchita.ar/assets/images/publishers/profile/${item?.profile_image}`;
 
-
-    /*   const handleOpenModal = () => {
-        setIsModalOpen(true);
-      };
-    
-      const handleCloseModal = () => {
-        setIsModalOpen(false);
-      }; */
-
-    const handleClickFavorite = async (e, subscriptionId) => {
-        e.preventDefault();
-        if (!logged && !session?.user) {
-            return;
-        }
-        const email = userLogged?.email;
-
-        try {
-            const res = await fetchGetFavoritesBySubscriptionId(subscriptionId, email);
-
-            if (res?.data?.length > 0) {
-                await fetchDeleteFavoritesBySubscriptionId(subscriptionId, email);
-                setFavorite(null);
-            } else {
-                await fetchCreateFavoritesBySubscriptionId(1, subscriptionId, email);
-                setFavorite(true);
-            }
-        } catch (error) {
-            console.error('Error actualizando favoritos:', error);
-        }
-
-        try {
-            const myRes = await fetchGetFavoritesByEmail(email);
-            setMyFavorites(myRes?.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     useEffect(() => {
         const getData = async () => {
             try {

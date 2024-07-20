@@ -5,15 +5,16 @@ import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ToDo = () => {
+  const { user } = useSelector((state) => state.auth.value);
   const { data: initialTodos = [], isLoading, error, refetch } = useGetTodosQuery();
   const [todos, setTodos] = useState([]);
+  const [todosOfUser, setTodosOfUser] = useState([])
   const [addTodo] = useAddTodoMutation();
   const [removeTodo] = useRemoveTodoMutation();
   const [editTodo] = useEditTodoMutation();
   const [newTodo, setNewTodo] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
-  const { user } = useSelector((state) => state.auth.value);
 
   useEffect(() => {
     if (initialTodos.length > 0) {
@@ -25,22 +26,13 @@ const ToDo = () => {
     }
   }, [initialTodos]);
 
-/*   const getNextId = () => {
-    if (todos.length === 0) {
-      return 1;
-    }
-    const highestId = Math.max(...todos.map(todo => todo?.id));
-    return highestId + 1;
-  }; */
-
   const handleAddTodo = () => {
     if (newTodo.trim() !== '') {
       const newTodoObject = {
         text: newTodo,
         completed: false,
         created_date: new Date().toLocaleDateString('en-GB'),
-        userId: user?.email,
-        /* id: getNextId(), */
+        email: user,
       };
 
       addTodo(newTodoObject).unwrap()
@@ -49,33 +41,33 @@ const ToDo = () => {
             setTodos([newTodoResponse, ...todos]);
             setNewTodo('');
           } else {
-            console.error('Error adding todo: newTodoResponse or its ID is undefined', newTodoResponse);
+            console.error('Error al agregar una tarea: ', newTodoResponse);
           }
         })
         .catch((error) => {
-          console.error('Error adding todo:', error);
+          console.error('Error al Agregar una Tarea:', error);
         });
     }
   };
 
   const handleRemoveTodo = (id) => {
     Alert.alert(
-      'Confirm Delete',
-      'Are you sure you want to delete this task?',
+      'Confirmar Borrado!',
+      'Está seguro de Eliminar esta Tarea?',
       [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           style: 'cancel',
         },
         {
-          text: 'Delete',
+          text: 'Borrar',
           onPress: () => {
             removeTodo(id).unwrap()
               .then(() => {
                 setTodos(todos.filter(todo => todo.id !== id));
               })
               .catch((error) => {
-                console.error('Error removing todo:', error);
+                console.error('Error al Eliminar  una Tarea:', error);
               });
           },
           style: 'destructive',
@@ -120,6 +112,13 @@ const ToDo = () => {
     refetch();
   };
 
+
+  useEffect(()=>{
+    //filtrar las notas del usuario logueado
+    const filteredData = todos.filter(todo => todo?.email === user);
+    setTodosOfUser(filteredData);
+  },[todos])
+
   const renderItem = ({ item }) => (
     <View style={styles.todoItem}>
       <Text style={styles.todoText}>{item.created_date} - {item.text}</Text>
@@ -133,6 +132,7 @@ const ToDo = () => {
   );
 
   if (error) {
+    console.error('Error Fetching Todos:', error);
     return <Text>Error: {error.message}</Text>;
   }
 
@@ -151,13 +151,13 @@ const ToDo = () => {
             style={styles.btnAddSave}
           >
             <Text style={styles.textButton}>{editMode ? "Guardar Tarea" : "Nueva Tarea"}</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
           {editMode && (
             <TouchableOpacity
               onPress={handleCancelEdit}
               style={styles.btnCancelEdit}
-            > 
-            <Text style={styles.textButton}>Cancelar</Text>
+            >
+              <Text style={styles.textButton}>Cancelar</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
@@ -169,7 +169,7 @@ const ToDo = () => {
         <Text>Loading...</Text>
       ) : (
         <FlatList
-          data={todos}
+          data={todosOfUser}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
         />
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   inputContainer: {
-    marginTop:15,
+    marginTop: 15,
     marginBottom: 25,
   },
   input: {
@@ -202,8 +202,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   refreshButton: {
-    width:40,
-    height:40,
+    width: 40,
+    height: 40,
     backgroundColor: '#24af63',
     borderRadius: 50,
     padding: 10,
@@ -223,23 +223,21 @@ const styles = StyleSheet.create({
   icon: {
     marginLeft: 15,
   },
-  btnCancelEdit:{
+  btnCancelEdit: {
     borderRadius: 3,
     backgroundColor: 'red',
-    paddingHorizontal:30,
-    paddingVertical:10,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
   },
-  btnAddSave:{
+  btnAddSave: {
     borderRadius: 3,
-    backgroundColor: '#24af63',//verde background
-    paddingHorizontal:30,
-    paddingVertical:10,
-    
+    backgroundColor: '#24af63', // verde background
+    paddingHorizontal: 30,
+    paddingVertical: 10,
   },
-  textButton:{
-    color:'#ffff',
-
-  }
+  textButton: {
+    color: '#fff',
+  },
 });
 
 export default ToDo;

@@ -1,7 +1,6 @@
 import CardItem from "./CardItem";
 import Header from "./Header";
 import Footer from "./Footer";
-import WhatsApp from "./Whatsapp";
 import PublisherRow from "./PublisherRow";
 import Publisher from "./Publisher";
 import ContactItem from "./ContactItem";
@@ -12,6 +11,7 @@ import SearchTool from "./SearchTool";
 import LocationMap from "./LocationMap";
 import CustomButton from "./CustomButton";
 import ImageSelector from "./ImageSelector";
+import WhatsApp from "./Whatsapp";
 
 export {
     CardItem,

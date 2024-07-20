@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import WhatsApp from './Whatsapp';
 
 
 const PublisherRow = ({ item, onHandleLocation, onHandleWhatsapp, onHandleDetail }) => {
@@ -15,9 +16,10 @@ const PublisherRow = ({ item, onHandleLocation, onHandleWhatsapp, onHandleDetail
         <TouchableOpacity onPress={onHandleLocation}>
           <Image style={styles.icon} source={require('../../assets/images/icons/location.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onHandleWhatsapp}>
+        {/* <TouchableOpacity onPress={onHandleWhatsapp}>
           <Image style={styles.icon} source={require('../../assets/images/icons/whatsapp_verde_bordeblanco.png')} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <WhatsApp phoneNumber={item?.whatsapp} />
         <TouchableOpacity onPress={onHandleDetail}>
           <Image style={styles.icon} source={require('../../assets/images/icons/ver_mas.png')} />
         </TouchableOpacity>
