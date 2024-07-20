@@ -4,27 +4,35 @@ import CheckBox from 'expo-checkbox';
 import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const SearchTool = ({ rubros = [{ name: 'pipo', id: 1 }, { name: 'caramuza', id: 2 }], onSearch }) => {
-    const [selectedRubro, setSelectedRubro] = useState({ id: '', type: '' });
+const SearchTool = ({ rubros = [], onSearch }) => {
+    const [selectedRubro, setSelectedRubro] = useState({ id: '', name: '', category_id: '', subcategory_id: '', subsubcategory_id: '' });
     const [descripcion, setDescripcion] = useState('');
     const [searchByRubro, setSearchByRubro] = useState(false);
     const [searchByDescripcion, setSearchByDescripcion] = useState(false);
 
     const handleSearch = () => {
         if (searchByRubro || searchByDescripcion) {
-            onSearch(selectedRubro.id, selectedRubro.type, descripcion, searchByRubro, searchByDescripcion);
+            onSearch(selectedRubro, descripcion, searchByRubro, searchByDescripcion);
         } else {
             Alert.alert('Buscar', 'Selecciona un Criterio de Búsqueda', [{ text: 'Aceptar', style: 'cancel' }]);
         }
     };
 
     const handleClear = () => {
-        setSelectedRubro({ id: '', type: '' });
+        setSelectedRubro({ id: '', name: '', category_id: '', subcategory_id: '', subsubcategory_id: '' });
         setDescripcion('');
         setSearchByRubro(false);
         setSearchByDescripcion(false);
-        onSearch('', '', '', false, false);
+        onSearch({ id: '', name: '', category_id: '', subcategory_id: '', subsubcategory_id: '' }, '', '', false, false);
     };
+
+    useEffect(() => {
+        !searchByRubro && setSelectedRubro({});
+    }, [searchByRubro]);
+
+    useEffect(() => {
+        !searchByDescripcion && setDescripcion('');
+    }, [searchByDescripcion]);
 
     useEffect(() => {
         handleClear();
@@ -43,14 +51,19 @@ const SearchTool = ({ rubros = [{ name: 'pipo', id: 1 }, { name: 'caramuza', id:
                     <Picker
                         selectedValue={selectedRubro.id}
                         onValueChange={(itemValue) => {
-                            const selected = rubros.find(rubro => rubro.id === itemValue);
-                            setSelectedRubro({ id: selected?.id, type: selected?.type });
+                            const selected = rubros.find(rubro => rubro?.id === itemValue);
+                            setSelectedRubro({ 
+                                id: selected?.id, 
+                                name: selected?.name,
+                                category_id: selected?.category_id, 
+                                subcategory_id: selected?.subcategory_id, 
+                                subsubcategory_id: selected?.subsubcategory_id  });
                         }}
                         enabled={searchByRubro}
                     >
                         <Picker.Item label="" value="" />
                         {rubros.map((rubro) => (
-                            <Picker.Item key={rubro.id} label={rubro.name} value={rubro.id} />
+                            <Picker.Item key={rubro?.id} label={rubro?.name} value={rubro?.id} />
                         ))}
                     </Picker>
                 </View>

@@ -18,12 +18,11 @@ const SubCategories = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
-  const { setSubscriptionsType, setActualPage, actualPage } = useGeneralContext();
+  const { setSubscriptionsType, setActualPage, actualPage } = useGeneralContext();//ver que se siga usando en el proyecto
 
   const isMounted = useRef(false);
 
   const handleClickOnSubCategory = (item) => {
-    console.log('****SubCategoria***** ', JSON.stringify(item, null, 2))
     dispatch(setSubCategorySelected(item));//Se actualiza y procesa en useEffect con categorySelected como dependencia
   }
 
@@ -44,24 +43,24 @@ const SubCategories = ({ navigation, route }) => {
       if (isMounted.current) {
         const subSubcategoriesOfSubCategory = dataOfServerStored.filter((subCategory) => subCategory?.subcategoryid == servicesStored.subCategorySelected?.id
         );
-        console.log(
+       /*  console.log(
           "SUBCATEGORIAS DE LA SUBCATEGORIA " +
           servicesStored.subCategorySelected?.name +
           " - " +
           JSON.stringify(subSubcategoriesOfSubCategory, null, 2)
-        );
+        ); */
         if (subSubcategoriesOfSubCategory.length > 0 && subSubcategoriesOfSubCategory[0].subsubcategoryid) {
           dispatch(setSubSubCategoriesSelected(subSubcategoriesOfSubCategory));
           navigation.navigate('SubSubCategories', servicesStored.subCategorySelected?.name);
         } else {
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, null);
-            console.log('data de ArrayPublishers ', data)
+            /* console.log('data de ArrayPublishers ', data) */
             data && dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.subCategorySelected?.name.split('_')?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
           } catch (error) {
-            console.error("Error while setting publishers: ", error);
+            console.error("Error al Traer Publishers: ", error);
           }
         }
       } else {
@@ -74,7 +73,7 @@ const SubCategories = ({ navigation, route }) => {
 
   useEffect(() => {
     setActualPage('subcategories');
-    console.log(JSON.stringify(route, null, 2))
+    /* console.log(JSON.stringify(route, null, 2)) */
   }, [])
 
 

@@ -7,9 +7,7 @@ const CategoriesContainer = ({ listaCategorias }) => {
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
 
  
-  const handleClickOnCategory = (item)=>{
-    console.log(JSON.stringify(item,null,2))
-  }
+
 
   const cardWidth = (width - 10) / 3; // Calcula el ancho de cada tarjeta para 3 tarjetas por fila
 

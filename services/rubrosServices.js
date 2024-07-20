@@ -6,7 +6,7 @@ export const rubrosApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getCategories: builder.query({
-      query: () => `categories.json?orderBy="id"`,
+      query: () => `categories.json?orderBy="name"`,
     }),
     getSubcategories: builder.query({
       query: () => `subcategories.json?orderBy="name"`,

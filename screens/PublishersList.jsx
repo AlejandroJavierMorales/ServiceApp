@@ -21,25 +21,21 @@ const PublishersList = ({ navigation, route }) => {
 
   const onHandleLocation = async (item) => {
     //Solicitar Permiso para Mostrar Ubicacion
-
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
-        setError("Permission to access location was denied");
+        setError("El Permiso de Acceso a Su Ubicación fue Denegado");
         return;
       }
       if (status === "granted") {
         dispatch(setPublisher(item));
         navigation.navigate('LocationScreen', `Ubicación de ${item?.company_name}`);
-        console.log(JSON.stringify('Location ' + item, null, 2));
+        /* console.log(JSON.stringify('Location ' + item, null, 2)); */
       }
-
     } catch (error) {
       console.log(error);
     }
-
-
   }
   const onHandleWhatsapp = (item) => {
     console.log(JSON.stringify('Whatsapp ' + item, null, 2));

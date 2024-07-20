@@ -54,9 +54,6 @@ const Header = ({ title = '', navigation, route }) => {
         );
     };
 
-    useEffect(() => {
-        console.log('Model: ', modalVisible);
-    }, [modalVisible]);
 
     return (
         <View>

@@ -59,8 +59,6 @@ const Publisher = ({ item }) => {
     };
 
     useEffect(() => {
-        console.log('Item en Get Images ' + JSON.stringify(item))
-
         const getData = async () => {
             try {
                 const res = await fetchGetImagesBySubscriptionId(item?.subscription_id);
@@ -138,17 +136,6 @@ const Publisher = ({ item }) => {
                 <Text>{item?.description1}</Text>
                 {item?.description2 && <Text>{item?.description2}</Text>}
 
-
-
-                {arrayImages.length > 0 && (
-
-                    <Text>{'anda a la concha de tu madre'}</Text>
-                    /*  images={arrayImages}
-                     path={`assets/images/subscriptions/${item?.subscription_id}`} */
-
-
-
-                )}
                 <View style={styles.contactContainer}>
                     {item?.street && <ContactItem data={`${item?.street} - ${item?.city}`} image={'home'} />}
                     {item?.phone && <ContactItem data={item?.phone} image={'phone'} />}
