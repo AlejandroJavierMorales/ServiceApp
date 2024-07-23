@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MyProfile, User } from "../screens";
+import { User } from "../screens";
 import { Header } from "../components/shared";
 import ToDo from "../screens/ToDo";
 

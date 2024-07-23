@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import useGeneralContext from '../../hooks/useGeneralContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearUser } from '../../fetures/User/UserSlice';
+import { useDB } from '../../hooks/useDB';
 
 const Header = ({ title = '', navigation, route }) => {
     const { user } = useSelector((state) => state.auth.value);
@@ -14,9 +15,10 @@ const Header = ({ title = '', navigation, route }) => {
         setSubSubCategorySelected, actualPage,
         setActualPage
     } = useGeneralContext();
+    const { truncateSessionTable } = useDB() // traigo el metodo que elimina la tabla de sessions de SQLite
 
     const sendWhatsApp = () => {
-        const message = 'Hola, te escribo desde la App Calamuchitar...';
+        const message = 'Hola, te escribo desde AppServices...';
         const phoneNumber = '+543546562855';
         const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
 
@@ -34,7 +36,7 @@ const Header = ({ title = '', navigation, route }) => {
 
     const handleLogout = () => {
         Alert.alert(
-            "Confirmación",
+            "Cerrar Sesión",
             "¿Seguro que quieres cerrar sesión?",
             [
                 {
@@ -44,9 +46,15 @@ const Header = ({ title = '', navigation, route }) => {
                 {
                     text: "Cerrar Sesión",
                     onPress: () => {
-                        dispatch(clearUser());
-                        // Navegar a la pantalla de ToDo
-                        navigation.navigate('UserTabScreen');
+                        try {
+                            truncateSessionTable(); // Se elimina la session 
+                            dispatch(clearUser());
+                            // Navegar a la pantalla de UserProfie
+                            navigation.navigate('UserTabScreen');
+                        } catch (error) {
+                            console.log({ errorSignOutDB: error });
+                        }
+
                     }
                 }
             ],
@@ -58,10 +66,18 @@ const Header = ({ title = '', navigation, route }) => {
     return (
         <View>
             <View style={styles.headerContainer}>
-                <Image
+                {/* <Image
                     source={{ uri: 'https://calamuchita.ar/assets/images/logos/logocalamuchitar.png' }}
                     style={styles.logo}
+                /> */}
+                <View style={styles.textTitle}>
+                <Image
+                    source={require('../../assets/images/services.png')}
+                    style={styles.logo}
                 />
+                    <Text style={styles.appText}>App</Text>
+                    <Text style={styles.serviceText}>Services</Text>
+                </View>
 
                 <TouchableOpacity style={styles.menuButton} onPress={() => setModalVisible(true)}>
                     <Icon name="bars" size={30} color="#000" />
@@ -88,10 +104,10 @@ const Header = ({ title = '', navigation, route }) => {
                             <Text style={styles.userNameText}>{`${user}`}</Text>
                             <View style={styles.spacer} />
 
-                            <TouchableOpacity onPress={()=>{navigation.navigate('User')}} style={[styles.iconButton, { marginRight: 5 }]}>
+                            <TouchableOpacity onPress={() => { navigation.navigate('User') }} style={[styles.iconButton, { marginRight: 5 }]}>
                                 <Icon name="user-circle" size={24} color="#000" />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>{navigation.navigate('ToDo')}} style={[styles.iconButton, { marginRight: 15 }]}>
+                            <TouchableOpacity onPress={() => { navigation.navigate('ToDo') }} style={[styles.iconButton, { marginRight: 15 }]}>
                                 <Icon name="sticky-note" size={24} color="#000" />
                             </TouchableOpacity>
 
@@ -152,9 +168,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     logo: {
-        width: 270,
-        height: 35,
+        width: 60,
+        height: 60,
         marginTop: 10,
+        borderWidth: 1,
+        borderColor: 'rgba(177, 231, 197, 0.5)',
+        borderStyle:'solid',
+        borderRadius:50,
+        marginStart: 40
     },
     menuButton: {
         marginRight: 15,
@@ -239,6 +260,22 @@ const styles = StyleSheet.create({
     spacer: {
         flex: 1,
     },
+    appText: {
+        color: '#24af63',
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginStart: 5
+    },
+    serviceText: {
+        color: 'black',
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    textTitle:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        
+    }
 });
 
 export default Header;

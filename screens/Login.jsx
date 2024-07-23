@@ -4,6 +4,7 @@ import { InputForm, SubmitButton } from "../components/shared";
 import { useDispatch } from "react-redux";
 import { useSignInMutation } from "../services/authService";
 import { setUser } from "../fetures/User/UserSlice"; // Asegúrate de que este import esté correcto
+import { useDB } from "../hooks/useDB";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -11,16 +12,25 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [triggerSignIn, result] = useSignInMutation();
 
+  const { insertSession } = useDB(); // traigo el metodo para insertarSession
+
+
   useEffect(() => {
     if (result.isSuccess) {
+      insertSession({
+        email: result.data.email,
+        localId: result.data.localId,
+        token: result.data.idToken,
+      })
       dispatch(
         setUser({
           email: result.data.email,
           idToken: result.data.idToken,
+          localId: result.data.localId,
         })
       );
     } else if (result.isError) {
-      alert("Login failed");
+      alert("Error: No se pudo Iniciar Sesión");
     }
   }, [result]);
 
@@ -73,10 +83,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 24,
     color: "#3a3a3a"
-/*     fontFamily: "Josefin", */
+    /*     fontFamily: "Josefin", */
   },
   sub: {
-    marginTop:20,
+    marginTop: 20,
     fontSize: 14,
     color: "#3a3a3a",
   },
