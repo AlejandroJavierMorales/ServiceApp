@@ -7,22 +7,47 @@
 Aplicación de Oferta de Servicios para dispositivos móviles Android y IOS.
 
 
+# ÍNDICE
+
+- [Descripción General](#descripción-general)
+  - [Rubros en 3 Niveles](#rubros-en-3-niveles)
+  - [Prestadores de Servicios](#prestadores-de-servicios)
+- [Tecnología Utilizada](#tecnología-utilizada)
+- [Funcionalidades o Features](#funcionalidades-o-features)
+- [Navegación](#navegación)
+- [Búsqueda de un Prestador de Servicios](#búsqueda-de-un-prestador-de-servicios)
+  - [Search Screen (buscar servicio)](#search-screen-buscar-servicio)
+- [Location](#location)
+- [Login y Registro de Usuario](#login-y-registro-de-usuario)
+- [User Profile](#user-profile)
+- [IMPORTANTE! Información para el testing de Funcionalidad](#importante-información-para-el-testing-de-funcionalidad)
 
 
-## Descripción de General
+
+
+
+
+
+
+
+## Descripción General
 
 ### Rubros en 3 Niveles
 
 En general, la apicación presenta en su pantalla principal una serie de cards con distintas categorías de servicios: Comercios, Deportes, Educación, Gastronomía, Recreación, Salud, Servicios y Turismo.
-Cada Categoría puede tener subcategorías y a su vez, las subcategorías pueden tener sub-subcategorias. Esta estructura de 3 niveles máximo, conforma una cantidad de rubros compuestos por el últio eslabón de la cadena de relación entre categoria, subcategoría y subsubcategoría. De modo que, por ejemplo, como la categoría Deportes no tiene subcategorías asociadas, concideramos a Deportes como un Rubro en el que se podran insribir prestadores de servicios deportivos.
+Cada Categoría puede tener subcategorías y a su vez, las subcategorías pueden tener sub-subcategorias. Esta estructura de 3 niveles máximo, conforma una cantidad de rubros compuestos por el últio eslabón de la cadena de relación entre categoria, subcategoría y subsubcategoría. De modo que, por ejemplo, como la categoría Deportes no tiene subcategorías asociadas, concideramos a Deportes como un Rubro en el que se podran inscribir prestadores de servicios deportivos.
 En el caso de la categoría Gastronomía, tiene asociadas algunas subcategorías entre las que podrán ver Restoranes. Como la subcategoría Restoranes no tiene subsubcategorias asociadas, Restoranes será otro de los rubros a los que se puedan inscribir quienes tengan un restorán.
 Por último, el ejemplo de sub-subcategorías lo tenemos con Turismo, que tiene las subcategoría Alojamiento y esta a su vez la sub-subcategoría Cabañas, entre otras. Para este caso el rubro de tercer nivel será Cabañas.
-
-![App Screenshot](/assets/images/screenshots/principal.png)
 
 ### Prestadores de Servicios
 
 Los Publishers que se inscriban y asocien a cada rubro se mostrarán en un listado dentro del rubro correspondiente. Cada publisher tiene una breve descripción de lo que ofrecen, un ícono de Location de modo que se podrá ver, através de las coordenadas en base de datos, su ubicación en el mapa, un ícono de Whatsapp, a través del cual podrán ser contactados, y un ícono de Ver Detalle que mostrará la información del servicio mucho más detallada.
+
+
+![App Screenshot](/assets/images/screenshots/principal.png)
+
+
+
 
 
 ## Tecnología Utilizada
@@ -30,12 +55,15 @@ Los Publishers que se inscriban y asocien a cada rubro se mostrarán en un lista
 Desarrollada en React Native y Expo. La base de datos utilizada es Real Time database de Firebase. Firebase Storage para almacenar imagenes de perfil y Google Maps API para mostrar ubicaciones.
 Para debug y simulación se utilizó VS Code como entorno de desarrollo, Expo Go para correr la aplicación en el dispositivo y Android Studio para correr la applicación en PC.
 
+
 ## Funcionalidades o Features
 
 Esta aplicación administra Estados Globales a través de React-Redux y Redux ToolKit, Persistencia de Sesión de Usuario con SQLite y el almacenamiento de datos con Real Time Database de Firebase.
 En Cada Publisher se implementó Location con Expo-Location y React-Native-Maps utilizando la API de Google para mostrar ubicaciones con datos de distancias.
 En el User Profile se implemetan expo-image-picker y expo-camera para definir la imagen de perfil del usuario desde la galería del dispositivo o con la cámara del mismo. La persistencia de dichas imágenes se realiza en el Storage de Firebase.
 Ademas se implementan Checkbox con Expo-Checkbox, Carrusel de Imagenes con React-Native-Swiper
+
+
 
 ### Navegación
 
@@ -48,14 +76,20 @@ Para Navegar la Aplicación, la misma presenta la siguiente estructura:
 
 Además se implenetó un Menú Principal, del tipo hamburquesa desde el cual se puede navegar a Home, User Profile, Search Screen y posee una opción de "Publicar en la App" para que quien quera ofrecer sus servicios pueda contactarse.
 
+
 ![App Screenshot](/assets/images/screenshots/MenuPrincipal.png)
+
+
 
 ## Busqueda de un Prestador de Servicios
 
 Quien desee buscar un prestador en la aplicación podrá hacerlo navegando las tarjetas de categorías o Rubros hasta llegar al servicio buscado donde se mostrarán los prestadores disponibles.
 Los prestadores se dispondrán en un listado con el Nombre del Prestador, una pequeña descripción y la posibilidad de ver su ubicación, enviarle un whatsapp o ver en detalle la iformación del mismo.
 
+
 ![App Screenshot](/assets/images/screenshots/publisher_list.png)
+
+
 
 ### Search Screen (buscar servicio)
 
@@ -108,14 +142,20 @@ Las mismas son:
 ![App Screenshot](/assets/images/screenshots/userNotes.png)
 
 
+
+
+
+
+
 ## IMPORTANTE! Información para el testing de Funcionalidad
 
-En el mensaje de entrega se describe el link a los archivos con las API Key necesarias:
-firebase.js
-googlemap.js
-realtimeDataBase.js
-users.js
----------------------
+En el mensaje de entrega se describe el link a los archivos con las API Key necesarias. Debera reemplazar los existentes en la carpeta /databases por los que encoontrará en el link:
+
+- firebase.js
+- googlemap.js
+- realtimeDataBase.js
+- users.js
+
 
 Existen 3 usuarios cargados en base de datos:
 
@@ -128,14 +168,13 @@ pass: 123456
 user3@gmail.com (sin imagen de perfil)
 pass: 123456
 
----------------------
 
-Publishers: Para ver publishers y acceder las features de Location, WhatsAPP y Ver Datalles podrán hacerlo accediendo desde la pantalla principal en la dategoria Deportes, en la categoría Gartronomía/ subcategoría Restoranes y en la categoría Turismo/ subcategoría Alojamientos/ sub-subcategoría Cabañas.
+- **Publishers:** Para ver publishers y acceder las features de Location, WhatsAPP y Ver Datalles podrán hacerlo accediendo desde la pantalla principal en la dategoria Deportes, en la categoría Gartronomía/ subcategoría Restoranes y en la categoría Turismo/ subcategoría Alojamientos/ sub-subcategoría Cabañas.
 
-Search Screen: Las busquedas por descripción se realizan segun un array de keywords cargadas en la propiedad keywords del documento publishers de RealTimaDataBase. Se deja a propósito la keyword "pp" en todos los publishers para que al buscar por descripción con esa clave se vean todos en el resultado.
+- **Search Screen:** Las busquedas por descripción se realizan segun un array de keywords cargadas en la propiedad keywords del documento publishers de RealTimaDataBase. Se deja a propósito la keyword "pp" en todos los publishers para que al buscar por descripción con esa clave se vean todos en el resultado.
 Pueden buscar por "asado" y aparecerá el restoran, o "asador" y aparecerán el restoran y las cabañas.
 
-keywords:
+**keywords:**
 pizzas,empanadas,cabrito, asado, vacio,pastas,pp
 cabañas con pileta,asador,parque,frente al rio,pp
 futbol,paddle,tenis,voley,pp
