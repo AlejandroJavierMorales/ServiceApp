@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
         borderRadius:5
     },
     text: {
-        fontFamily: "Josefin",
         fontSize: 18
     },
 });

@@ -1,5 +1,5 @@
 const calculateDistanceBetweenTwoCoordinates = (lat1, lon1, lat2, lon2) => {
-    console.log(lat1, lon1, lat2, lon2)
+
     // Convertir todas las coordenadas a radianes
     lat1 = gradosARadianes(lat1);
     lon1 = gradosARadianes(lon1);

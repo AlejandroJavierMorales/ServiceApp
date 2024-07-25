@@ -41,9 +41,6 @@ function Search({ navigation, route }) {
     }
   };
 
-  const onHandleWhatsapp = (item) => {
-    console.log(JSON.stringify('Whatsapp ' + item, null, 2));
-  };
 
   const onHandleDetail = (item) => {
     item && dispatch(setPublisher(item));

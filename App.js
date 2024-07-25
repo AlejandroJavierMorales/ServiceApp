@@ -14,14 +14,6 @@ export default function App() {
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
 
-  // Cargar las fuentes de manera condicional
-  /* const [fontsLoaded] = useFonts({
-    Josefin: require("./assets/JosefinSans-Regular.ttf"),
-  }); */
-
-  /* if (!fontsLoaded) {
-    return null; // Muestra un cargando, podrías poner un spinner o algo similar
-  } */
 
   useEffect(()=>{
     initDB()

@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { uploadImageToFirebaseStorage } from '../databases/uploadImageToFirebaseStorage';
 import { setUserData } from '../fetures/User/UserSlice';
 
-const User = ({ navigation }) => {
+const User = ({ navigation, route }) => {
   const { user } = useSelector((state) => state.auth.value);
   const { data: users, error: userError, isLoading: isUserLoading } = useGetUserDataQuery();
   const [userProfile, setUserProfile] = useState(null);
@@ -42,10 +42,9 @@ const User = ({ navigation }) => {
 
       if (!result.canceled && result.assets[0]?.uri) {
         const imageUri = result.assets[0]?.uri;
-        console.log('Image URI from gallery:', imageUri); // Debugging log
         try {
           const downloadURL = await uploadImageToFirebaseStorage(imageUri, user);
-          await updateUserData({ ...editData, id: userProfile.id, profileimage: downloadURL  });
+          await updateUserData({ ...editData, id: userProfile.id, profileimage: downloadURL });
           dispatch(setUserData({ ...editData, profileimage: downloadURL }));
           setUserProfile({ ...userProfile, profileimage: downloadURL });
         } catch (error) {
@@ -69,7 +68,7 @@ const User = ({ navigation }) => {
         const imageUri = result.assets[0]?.uri;
         try {
           const downloadURL = await uploadImageToFirebaseStorage(imageUri, user);
-          await updateUserData({...editData, id: userProfile.id, profileimage: downloadURL });
+          await updateUserData({ ...editData, id: userProfile.id, profileimage: downloadURL });
           dispatch(setUserData({ ...editData, profileimage: downloadURL }));
           setUserProfile({ ...userProfile, profileimage: downloadURL });
         } catch (error) {
@@ -110,6 +109,7 @@ const User = ({ navigation }) => {
 
   const defaultImageRoute = require("../assets/images/user/user.png");
 
+
   return (
     <View style={styles.container}>
       <Image
@@ -122,28 +122,28 @@ const User = ({ navigation }) => {
       </Pressable>
 
       {isUserLoading ? (
-        <Text>Loading user data...</Text>
+        <Text>Cargando datos de usuario...</Text>
       ) : (
         <View style={styles.userDataContainer}>
           <View style={styles.infoRow}>
             <Icon name="user" size={24} color="#000" />
-            <Text>{`${userProfile?.firstname} ${userProfile?.lastname}`}</Text>
+            <Text>{`${userProfile?.firstname || ''} ${userProfile?.lastname || ''}`}</Text>
           </View>
           <View style={styles.infoRow}>
             <Icon name="map-marker" size={24} color="#000" />
-            <Text>{`${userProfile?.street} ${userProfile?.city} ${userProfile?.state}`}</Text>
+            <Text>{`${userProfile?.street || ''}  ${userProfile?.city || ''} ${userProfile?.state || ''}`}</Text>
           </View>
           <View style={styles.infoRow}>
             <Icon name="envelope" size={24} color="#000" />
-            <Text>{`${userProfile?.email}`}</Text>
+            <Text>{`${userProfile?.email || ''}`}</Text>
           </View>
           <View style={styles.infoRow}>
             <Icon name="whatsapp" size={24} color="#000" />
-            <Text>{`${userProfile?.whatsapp}`}</Text>
+            <Text>{`${userProfile?.whatsapp || ''}` }</Text>
           </View>
           <View style={styles.infoRow}>
             <Icon name="sticky-note" size={24} color="#000" />
-            <Text>{`${userProfile?.obs}`}</Text>
+            <Text>{`${userProfile?.obs || ''}`}</Text>
           </View>
           <Pressable style={styles.editButton} onPress={handleEdit}>
             <Icon name="edit" size={32} color="#24af63" />

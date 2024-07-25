@@ -34,13 +34,11 @@ const styles = StyleSheet.create({
   subtitle: {
     width: "90%",
     fontSize: 16,
-    /* fontFamily: "Josefin", */
   },
   error: {
     paddintTop: 2,
     fontSize: 16,
     color: "red",
-    /* fontFamily: "Josefin", */
     fontStyle: "italic",
   },
   input: {
@@ -49,7 +47,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderBottomColor: "#24af63",
     padding: 2,
-    /* fontFamily: "Josefin", */
     fontSize: 14,
     color: "#3a3a3a"
   },

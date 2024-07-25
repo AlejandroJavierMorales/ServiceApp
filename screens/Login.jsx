@@ -6,7 +6,7 @@ import { useSignInMutation } from "../services/authService";
 import { setUser } from "../fetures/User/UserSlice"; // Asegúrate de que este import esté correcto
 import { useDB } from "../hooks/useDB";
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 24,
     color: "#3a3a3a"
-    /*     fontFamily: "Josefin", */
   },
   sub: {
     marginTop: 20,

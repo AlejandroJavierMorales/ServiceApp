@@ -5,6 +5,10 @@ import useGeneralContext from '../../hooks/useGeneralContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearUser } from '../../fetures/User/UserSlice';
 import { useDB } from '../../hooks/useDB';
+import { useIsFocused } from '@react-navigation/native';
+
+
+
 
 const Header = ({ title = '', navigation, route }) => {
     const { user } = useSelector((state) => state.auth.value);
@@ -15,8 +19,9 @@ const Header = ({ title = '', navigation, route }) => {
         setSubSubCategorySelected, actualPage,
         setActualPage
     } = useGeneralContext();
-    const { truncateSessionTable } = useDB() // traigo el metodo que elimina la tabla de sessions de SQLite
 
+    const { truncateSessionTable } = useDB() // traigo el metodo que elimina la tabla de sessions de SQLite
+    /*   const route = useRoute(); */
     const sendWhatsApp = () => {
         const message = 'Hola, te escribo desde AppServices...';
         const phoneNumber = '+543546562855';
@@ -71,10 +76,10 @@ const Header = ({ title = '', navigation, route }) => {
                     style={styles.logo}
                 /> */}
                 <View style={styles.textTitle}>
-                <Image
-                    source={require('../../assets/images/services.png')}
-                    style={styles.logo}
-                />
+                    <Image
+                        source={require('../../assets/images/services.png')}
+                        style={styles.logo}
+                    />
                     <Text style={styles.appText}>App</Text>
                     <Text style={styles.serviceText}>Services</Text>
                 </View>
@@ -103,13 +108,20 @@ const Header = ({ title = '', navigation, route }) => {
                             <Icon name="user" size={20} color="#000" />
                             <Text style={styles.userNameText}>{`${user}`}</Text>
                             <View style={styles.spacer} />
+                            {
+                                (route.name === 'User' || route.name === 'ToDo') && (
+                                    <>
+                                        <TouchableOpacity onPress={() => { navigation.navigate('User') }} style={[styles.iconButton, { marginRight: 5 }]}>
+                                            <Icon name="user-circle" size={24} color="#000" />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { navigation.navigate('ToDo') }} style={[styles.iconButton, { marginRight: 15 }]}>
+                                            <Icon name="sticky-note" size={24} color="#000" />
+                                        </TouchableOpacity>
+                                    </>
+                                )
 
-                            <TouchableOpacity onPress={() => { navigation.navigate('User') }} style={[styles.iconButton, { marginRight: 5 }]}>
-                                <Icon name="user-circle" size={24} color="#000" />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { navigation.navigate('ToDo') }} style={[styles.iconButton, { marginRight: 15 }]}>
-                                <Icon name="sticky-note" size={24} color="#000" />
-                            </TouchableOpacity>
+                            }
+
 
                             <TouchableOpacity onPress={handleLogout} style={styles.iconButton}>
                                 <Icon name="sign-out" size={24} color="#000" />
@@ -173,8 +185,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderWidth: 1,
         borderColor: 'rgba(177, 231, 197, 0.5)',
-        borderStyle:'solid',
-        borderRadius:50,
+        borderStyle: 'solid',
+        borderRadius: 50,
         marginStart: 40
     },
     menuButton: {
@@ -271,10 +283,10 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
     },
-    textTitle:{
+    textTitle: {
         flexDirection: 'row',
         alignItems: 'center',
-        
+
     }
 });
 

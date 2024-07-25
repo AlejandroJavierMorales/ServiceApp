@@ -21,7 +21,6 @@ const SubSubCategories = ({ navigation, route }) => {
   const isMounted = useRef(false);
 
   const handleClickOnSubSubCategory = (item) => {
-    console.log(JSON.stringify(item, null, 2))
     dispatch(setSubSubCategorySelected(item));
   }
 
@@ -40,16 +39,12 @@ const SubSubCategories = ({ navigation, route }) => {
 
     const loadPublishers = async () => {
       if (isMounted.current) {
-        console.log(
-          "La SubSubCategoria Seleccionada es : " +
-          JSON.stringify(servicesStored.subSubCategorySelected, null, 2)
-        );
+
         //Procesar las subSubCategorias de subCategorySelected
         if (servicesStored.subSubCategorySelected !== null) {
           //Mostrar publicaciones para la categoria seleciconada en SubscriptionsPage
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, servicesStored.subSubCategorySelected?.id);
-            console.log('data de ArrayPublishers ', data);
             data && dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.subSubCategorySelected?.name.split('_')?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
@@ -63,7 +58,6 @@ const SubSubCategories = ({ navigation, route }) => {
   }, [servicesStored.subSubCategorySelected]);
 
   useEffect(() => {
-    console.log('SUBSUBCATEGORIAS ***   ', servicesStored.subSubCategoriesSelected)
     isMounted.current = true;
     return () => {
       isMounted.current = false;

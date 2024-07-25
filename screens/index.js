@@ -7,6 +7,7 @@ import User from "./User";
 import Search from "./Search";
 import Publish from "./Publish";
 import LocationScreen from "./LocationScreen";
+import ToDo from "./ToDo";
 
 export {
     Home,
@@ -17,5 +18,6 @@ export {
     User,
     Search,
     Publish,
-    LocationScreen
+    LocationScreen,
+    ToDo
 }

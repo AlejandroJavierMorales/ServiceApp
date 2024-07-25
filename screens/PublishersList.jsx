@@ -22,7 +22,7 @@ const PublishersList = ({ navigation, route }) => {
             }
             if (status === "granted") {
                 dispatch(setPublisher(item));
-                navigation.navigate('LocationScreen', `Ubicación de ${item?.company_name}`);
+                navigation.navigate('LocationScreen', `${item?.company_name}`);
             }
         } catch (error) {
             console.log(error);
@@ -32,7 +32,6 @@ const PublishersList = ({ navigation, route }) => {
     const onHandleDetail = (item) => {
         item && dispatch(setPublisher(item));
         navigation.navigate('PublisherDetail', item?.company_name);
-        console.log('Detail ' + JSON.stringify(item, null, 2));
     };
 
     return (

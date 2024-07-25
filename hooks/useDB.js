@@ -19,7 +19,7 @@ const db = SQLite.openDatabaseSync("sessions.db");
   const getSession =  () => {
     const sql = `SELECT * FROM sessions;`;
     const firstRow =  db.getFirstSync(sql); 
-    console.log(firstRow)
+
     return firstRow;
   };
 

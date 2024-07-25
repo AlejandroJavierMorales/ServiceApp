@@ -43,19 +43,14 @@ const SubCategories = ({ navigation, route }) => {
       if (isMounted.current) {
         const subSubcategoriesOfSubCategory = dataOfServerStored.filter((subCategory) => subCategory?.subcategoryid == servicesStored.subCategorySelected?.id
         );
-       /*  console.log(
-          "SUBCATEGORIAS DE LA SUBCATEGORIA " +
-          servicesStored.subCategorySelected?.name +
-          " - " +
-          JSON.stringify(subSubcategoriesOfSubCategory, null, 2)
-        ); */
+
         if (subSubcategoriesOfSubCategory.length > 0 && subSubcategoriesOfSubCategory[0].subsubcategoryid) {
           dispatch(setSubSubCategoriesSelected(subSubcategoriesOfSubCategory));
           navigation.navigate('SubSubCategories', servicesStored.subCategorySelected?.name);
         } else {
           try {
             const data = await getPublishers(servicesStored.categorySelected?.id, servicesStored.subCategorySelected?.id, null);
-            /* console.log('data de ArrayPublishers ', data) */
+
             data && dispatch(setPublishers(data));
             setSubscriptionsType('categories');
             navigation.navigate('PublishersList', `Servicios de ${servicesStored.subCategorySelected?.name.split('_')?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}`);
@@ -73,7 +68,6 @@ const SubCategories = ({ navigation, route }) => {
 
   useEffect(() => {
     setActualPage('subcategories');
-    /* console.log(JSON.stringify(route, null, 2)) */
   }, [])
 
 

@@ -23,7 +23,7 @@ const fetchGetImagesBySubscriptionId = async (subscriptionId) => {
         })
         .then((data) => {
             if (data.status !== 200) {
-                console.log(data.message)
+
                 return {
                     status: 400,
                     message: data.message,

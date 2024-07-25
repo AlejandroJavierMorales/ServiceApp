@@ -17,7 +17,6 @@ const LocationMap = ({ entities, onHandleLocation, onHandleWhatsapp, onHandleDet
         //Cargar mi posición en el primer renderizado del componente
         const getMyPosition = async () => {
             let location = await Location.getCurrentPositionAsync({});
-            console.log(location);
             setLocation({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,

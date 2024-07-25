@@ -110,17 +110,14 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 20,
     fontSize: 24,
-    /* fontFamily: "Josefin", */
   },
   sub: {
     marginTop:20,
     fontSize: 14,
-    /* fontFamily: "Josefin", */
     color:"#3a3a3a",
   },
   subLink: {
     fontSize: 16,
-    /* fontFamily: "Josefin", */
     color:  "#24af63",
   },
 });

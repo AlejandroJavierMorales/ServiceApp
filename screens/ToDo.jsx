@@ -4,7 +4,7 @@ import { useGetTodosQuery, useAddTodoMutation, useRemoveTodoMutation, useEditTod
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ToDo = () => {
+const ToDo = ({navigation, route}) => {
   const { user } = useSelector((state) => state.auth.value);
   const { data: initialTodos = [], isLoading, error, refetch } = useGetTodosQuery();
   const [todos, setTodos] = useState([]);

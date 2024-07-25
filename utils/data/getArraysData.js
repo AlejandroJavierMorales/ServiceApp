@@ -10,7 +10,7 @@ const getArraysData = () => {
     //Procesa los datos brutos del servidor (Categorias-SubCategorias y SubSubCategorias 
     //Saca las Categorias Unicas y Subcategorias Unicas ya que  dataOfServer es 
     //Categorias LeftJoin SubCategorias Left JOin SubSubCategorias 
-    console.log("ServerData: ", dataOfServer);
+   
     // Creamos un objeto de mapa para almacenar categorías únicas.
     const uniqueCategoriesMap = new Map();
     const uniqueSubCategoriesMap = new Map();
@@ -28,8 +28,7 @@ const getArraysData = () => {
 
     const uniqueCategories = Array.from(uniqueCategoriesMap.values());
     const uniqueSubCategories = Array.from(uniqueSubCategoriesMap.values());
-    console.log('Cattegorias', uniqueCategories)
-    console.log('SUBCattegorias', uniqueSubCategories)
+
     setCategories(uniqueCategories); //Setea array de Categorias en la variable de contexto correspondiente
     setSubCategories(uniqueSubCategories);//Setea array de SubCategorias en la variable de contexto correspondiente
 
