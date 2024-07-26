@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MyBlankProject",
+    "name": "AppServices",
     "slug": "MyBlankProject",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,10 +18,21 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.alejandroJavierMorales.appServices",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCysk1YoQxIiigHBtD4NZ51_yZaXPDlkbc"
+        }
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ac45bc96-bfc4-49f2-b5db-ebafdadee8ee"
+      }
     }
   }
 }

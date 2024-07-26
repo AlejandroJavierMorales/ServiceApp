@@ -1,30 +1,32 @@
 import React, { useEffect } from 'react';
-import { StatusBar, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { useFonts } from "expo-font";
 import { GeneralContextProvider } from './context/GeneralContext';
 import Navigator from './navigation/Navigator';
 import { Provider } from "react-redux";
 import store from "./store";
 import { useDB } from './hooks/useDB';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
 
-  const {initDB} = useDB()  // llamo a initDB
+  const { initDB } = useDB()  // llamo a initDB
 
   const { width } = useWindowDimensions(); // Obtiene el ancho de la pantalla
 
 
-  useEffect(()=>{
+  useEffect(() => {
     initDB()
   })
 
   return (
-    <Provider store={store}>
-      <GeneralContextProvider>
-        <Navigator />
-      </GeneralContextProvider>
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <GeneralContextProvider>
+          <Navigator />
+        </GeneralContextProvider>
+      </Provider>
+    </SafeAreaProvider>
   );
 }
 

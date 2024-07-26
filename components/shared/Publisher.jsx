@@ -61,37 +61,7 @@ const Publisher = ({ item }) => {
                     style={styles.profileImage}
                 />
             </View>
-            <View style={styles.actionBar}>
-                <TouchableOpacity onPress={() => openLocationModal([item])}>
-                    <Image
-                        source={require('../../assets/images/icons/location.png')}
-                        style={styles.icon}
-                        title='Ver Ubicación en el Mapa'
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={(e) => handleClickFavorite(e, item?.subscription_id)}>
-                    <Image
-                        source={favorite ? require('../../assets/images/icons/favorito_red.png') : require('../../assets/images/icons/favorito_black.png')}
-                        style={styles.icon}
-                        title='Guardar en Favoritos'
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => logged && userLogged?.email && openCalendarModal(item)}>
-                    <Image
-                        source={require('../../assets/images/icons/agenda_color.png')}
-                        style={styles.icon}
-                        title='Agendar'
-                    />
-                </TouchableOpacity>
-                {item?.delivery !== 0 && (
-                    <Image
-                        source={require('../../assets/images/icons/delivery.png')}
-                        style={styles.icon}
-                        title='Hace Entrega a Domicilio'
-                    />
-                )}
-            </View>
-
+            
             <CarruselSwiper />
 
             <View style={styles.descriptionContainer}>

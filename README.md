@@ -53,15 +53,15 @@ Los Publishers que se inscriban y asocien a cada rubro se mostrarán en un lista
 ## Tecnología Utilizada
 
 Desarrollada en React Native y Expo. La base de datos utilizada es Real Time database de Firebase. Firebase Storage para almacenar imagenes de perfil y Google Maps API para mostrar ubicaciones.
-Para debug y simulación se utilizó VS Code como entorno de desarrollo, Expo Go para correr la aplicación en el dispositivo y Android Studio para correr la applicación en PC.
+Para debug y simulación se utilizó VS Code como entorno de desarrollo, Expo Go para correr la aplicación en el dispositivo físico y Android Studio para correr la aplicación en PC y debug del APK.
 
 
 ## Funcionalidades o Features
 
 Esta aplicación administra Estados Globales a través de React-Redux y Redux ToolKit, Persistencia de Sesión de Usuario con SQLite y el almacenamiento de datos con Real Time Database de Firebase.
 En Cada Publisher se implementó Location con Expo-Location y React-Native-Maps utilizando la API de Google para mostrar ubicaciones con datos de distancias.
-En el User Profile se implemetan expo-image-picker y expo-camera para definir la imagen de perfil del usuario desde la galería del dispositivo o con la cámara del mismo. La persistencia de dichas imágenes se realiza en el Storage de Firebase.
-Ademas se implementan Checkbox con Expo-Checkbox, Carrusel de Imagenes con React-Native-Swiper
+En el User Profile se implemetan expo-image-picker y expo-camera para definir la imagen de perfil del usuario desde la galería del dispositivo o con la cámara del mismo. La persistencia de dichas imágenes se realiza en el Storage de FireStore.
+Además se implementan Checkbox con Expo-Checkbox, Carrusel de Imagenes con React-Native-Swiper en las funcionalidades de búsqueda y en la visualización de detalles del publisher.
 
 
 
@@ -149,34 +149,40 @@ Las mismas son:
 
 ## IMPORTANTE! Información para el testing de Funcionalidad
 
-En el mensaje de entrega se describe el link a los archivos con las API Key necesarias. Debera reemplazar los existentes en la carpeta /databases por los que encoontrará en el link:
+En el mensaje de Entrega de la plataforma de Coder-House se describe el link a los archivos con las API Key necesarias. Debera reemplazar los existentes en la carpeta /databases por los que encoontrará en el link:
+al repositorio de GitHub, y el Link a la carpeta de Drive donde encontarán el proyecto (sin node modules) y el APK.
 
-- firebase.js
-- googlemap.js
-- realtimeDataBase.js
-- users.js
+***APK:*** 
+
+- Descargar el mismo dentro de una carpeta en una ubicación conocida dentro del dispositivo
+- Entrar al dispositivo usando alguna aplicación de exploración de archivos, navegar a la carpeta en la que guardó el archivo .apk y hacer click sobre el mismo para correr la instalación de la aplicación.
 
 
+**Usuarios Activos en La Base de Datos**
 Existen 3 usuarios cargados en base de datos:
 
-user1@gmail.com (con imagen de perfil utilizando la camara)
+1. user1@gmail.com (con imagen de perfil utilizando la camara)
 pass: 123456
 
-user2@gmail.com (con imagen de perfil utilizando la galería)
+2. user2@gmail.com (con imagen de perfil utilizando la galería)
 pass: 123456
 
-user3@gmail.com (sin imagen de perfil)
+3. user3@gmail.com (sin imagen de perfil)
 pass: 123456
 
 
-- **Publishers:** Para ver publishers y acceder las features de Location, WhatsAPP y Ver Datalles podrán hacerlo accediendo desde la pantalla principal en la dategoria Deportes, en la categoría Gartronomía/ subcategoría Restoranes y en la categoría Turismo/ subcategoría Alojamientos/ sub-subcategoría Cabañas.
+- **PUBLISHERS:** 
+Para ver publishers y acceder las features de Location, WhatsAPP y Ver Datalles podrán hacerlo accediendo desde la pantalla principal en la categoria **Deportes**, en la categoría Comercios/ subcategoría **Autoservicios**, en la categoría Gartronomía/ subcategoría **Restoranes** y en la categoría Turismo/ subcategoría Alojamientos/ sub-subcategoría **Cabañas** y **Hoteles**.
 
 - **Search Screen:** Las busquedas por descripción se realizan segun un array de keywords cargadas en la propiedad keywords del documento publishers de RealTimaDataBase. Se deja a propósito la keyword "pp" en todos los publishers para que al buscar por descripción con esa clave se vean todos en el resultado.
 Pueden buscar por "asado" y aparecerá el restoran, o "asador" y aparecerán el restoran y las cabañas.
 
 **keywords:**
-pizzas,empanadas,cabrito, asado, vacio,pastas,pp
-cabañas con pileta,asador,parque,frente al rio,pp
-futbol,paddle,tenis,voley,pp
+- Autoservicios: mercadito, mercado, autoservicio, panaderia, carniceria, almacen, productos de limpieza,pp 
+- Restoran: pizzas,empanadas,cabrito, asado, vacio,pastas,pp
+- Cabañas/Hoteles: hotel,cabañas con pileta,asador,parque,frente al rio,pp
+- deportes: futbol,paddle,tenis,voley,pp
+
+Nota: al buscar por las palabras claves de cabañas/Hoteles, aparecerá 2 veces el mismo publisher ya que tiene asignadas 2 categorías: Turismo/Alojamiento/Cabañas y Turismo/Alojamiento/Hoteles.
 
 

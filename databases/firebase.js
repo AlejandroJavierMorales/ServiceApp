@@ -1,9 +1,9 @@
-// firebase.js
+
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { getDatabase } from 'firebase/database';
 
-// Tu configuración de Firebase
+//configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCOiB-fLMTOWmzExMY1GgEA3lvBPJJE_6c",
   authDomain: "appservice-636a4.firebaseapp.com",

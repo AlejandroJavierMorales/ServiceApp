@@ -7,7 +7,7 @@ const { width: screenWidth } = Dimensions.get('window');
 
 // Datos del carrusel
 const carouselData = [
-  { uri: 'https://calamuchita.ar/assets/images/cities/losreartes1.webp' },
+  { uri: 'https://calamuchita.ar/assets/images/cities/losreartes1.webp' },//TestMock
   { uri: 'https://calamuchita.ar/assets/images/cities/losreartes2.webp' },
   { uri: 'https://calamuchita.ar/assets/images/cities/losreartes3.webp' },
   // Modificar funcionamiento para que si el publisher o subscription tiene images=true traiga sus imagenes de la web
